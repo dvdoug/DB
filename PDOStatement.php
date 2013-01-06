@@ -107,7 +107,7 @@
      * @param int $aDataType data type for the parameter using the DatabaseInterface::PARAM_* constants.
      * @return bool
      */
-    public function bindParam($aParam, &$aVariable, $aDataType = DatabaseInterface::PARAM_IS_STR) {
+    public function bindParamToVariable($aParam, &$aVariable, $aDataType = DatabaseInterface::PARAM_IS_STR) {
       return parent::bindParam($aParam, $aVariable, $aDataType);
     }
 
@@ -118,7 +118,7 @@
      * @param int $aDataType data type for the column using the DatabaseInterface::PARAM_* constants.
      * @return bool
      */
-    public function bindColumn($aColumn, &$aVariable, $aDataType = DatabaseInterface::PARAM_IS_STR) {
+    public function bindResultColumn($aColumn, &$aVariable, $aDataType = DatabaseInterface::PARAM_IS_STR) {
       return parent::bindColumn($aColumn, $aVariable, $aDataType);
     }
 
@@ -129,7 +129,7 @@
      * @param int $aDataType data type for the parameter using the DatabaseInterface::PARAM_* constants.
      * @return bool
      */
-    public function bindValue($aParam, $aValue, $aDataType = DatabaseInterface::PARAM_IS_STR) {
+    public function bindParamToValue($aParam, $aValue, $aDataType = DatabaseInterface::PARAM_IS_STR) {
       return parent::bindValue($aParam, $aValue, $aDataType);
     }
 
