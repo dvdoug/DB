@@ -13,11 +13,11 @@
    */
   interface DatabaseInterface {
     
-    const PARAM_NULL = 0;
-    const PARAM_INT = 1;
-    const PARAM_STR = 2;
-    const PARAM_LOB = 3;
-    const PARAM_BOOL = 5;
+    const PARAM_IS_NULL = 0;
+    const PARAM_IS_INT = 1;
+    const PARAM_IS_STR = 2;
+    const PARAM_IS_LOB = 3;
+    const PARAM_IS_BOOL = 5;
 
     /**
      * Prepares a SQL statement for execution and returns a statement object
@@ -70,7 +70,7 @@
      * @param $aParamaterType data type hint for drivers
      * @return string a quoted string that is theoretically safe to pass into an SQL statement
      */
-    public function quote($aParam, $aParamType = DatabaseInterface::PARAM_STR);
+    public function quote($aParam, $aParamType = DatabaseInterface::PARAM_IS_STR);
     
     /**
      * Adds appropriate quotes to an identifier so it can be safely used in an SQL statement

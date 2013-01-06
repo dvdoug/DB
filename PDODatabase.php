@@ -44,7 +44,7 @@
      * @param $aParamaterType data type hint for drivers
      * @return string a quoted string that is theoretically safe to pass into an SQL statement
      */
-    public function quote($aParam, $aParamType = DatabaseInterface::PARAM_STR) {
+    public function quote($aParam, $aParamType = DatabaseInterface::PARAM_IS_STR) {
       return parent::quote($aParam, $aParamType);
     }
     
