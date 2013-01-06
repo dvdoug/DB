@@ -32,7 +32,7 @@
     public function __construct($aDSN, $aUsername, $aPassword, array $aDriverOptions = NULL) {
       parent::__construct($aDSN, $aUsername, $aPassword, $aDriverOptions);
       self::setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-      self::setAttribute(\PDO::ATTR_STATEMENT_CLASS, array('\DVDoug\DB\PDOStatement', array()));
+      self::setAttribute(\PDO::ATTR_STATEMENT_CLASS, array('\DVDoug\DB\PDOStatement'));
       self::setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
     }
     
