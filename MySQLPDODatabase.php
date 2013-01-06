@@ -7,7 +7,7 @@
   namespace DVDoug\DB;
 
   /**
-   * MySQL database connection
+   * MySQL database connection (PDO)
    * @author Doug Wright
    * @package DB
    */
