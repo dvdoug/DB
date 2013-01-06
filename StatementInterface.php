@@ -65,7 +65,7 @@
      * @param int $aDataType data type for the parameter using the DatabaseInterface::PARAM_* constants.
      * @return bool
      */
-    public function bindParam($aParam, &$aVariable, $aDataType = NULL);
+    public function bindParam($aParam, &$aVariable, $aDataType = DatabaseInterface::PARAM_IS_STR);
 
     /**
      * Binds a column to a variable
@@ -74,7 +74,7 @@
      * @param int $aDataType data type for the column using the DatabaseInterface::PARAM_* constants.
      * @return bool
      */
-    public function bindColumn($aColumn, &$aVariable, $aDataType = NULL);
+    public function bindColumn($aColumn, &$aVariable, $aDataType = DatabaseInterface::PARAM_IS_STR);
 
     /**
      * Binds a value to a parameter
@@ -83,7 +83,7 @@
      * @param int $aDataType data type for the parameter using the DatabaseInterface::PARAM_* constants.
      * @return bool
      */
-    public function bindValue($aParam, $aValue, $aDataType = NULL);
+    public function bindValue($aParam, $aValue, $aDataType = DatabaseInterface::PARAM_IS_STR);
 
     /**
      * Closes the cursor, enabling the statement to be executed again.
