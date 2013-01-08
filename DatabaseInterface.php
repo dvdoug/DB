@@ -12,7 +12,7 @@
    * @package DB
    */
   interface DatabaseInterface {
-    
+
     const PARAM_IS_NULL = 0;
     const PARAM_IS_INT = 1;
     const PARAM_IS_STR = 2;
@@ -51,7 +51,7 @@
     public function inTransaction();
 
     /**
-     * Executes an SQL statement, returning the result set if any as a StatementInterface object 
+     * Executes an SQL statement, returning the result set if any as a StatementInterface object
      * @param string $aSQL the SQL statement to execute.
      * @return StatementInterface|true
      */
@@ -71,12 +71,43 @@
      * @return string a quoted string that is theoretically safe to pass into an SQL statement
      */
     public function quote($aParam, $aParamType = DatabaseInterface::PARAM_IS_STR);
-    
+
     /**
      * Adds appropriate quotes to an identifier so it can be safely used in an SQL statement
      * @param mixed $aIdentifier the parameter to be quoted.
      * @return string
      */
     public function quoteIdentifier($aIdentifier);
-   
+
+    /**
+     * List of tables in a database
+     * @param string $aDatabase database/schema name
+     * @return array
+     */
+    public function getTables($aDatabase = NULL);
+
+    /**
+     * List of columns (and types) in a table
+     * @param string $aDatabase database/schema name
+     * @param string $aTable table name
+     * @return array
+     */
+    public function getTableColumns($aDatabase, $aTable);
+
+    /**
+     * Primary key column(s)
+     * @param string $aDatabase database/schema name
+     * @param string $aTable table name
+     * @return array
+     */
+    public function getPrimaryKey($aDatabase, $aTable);
+
+    /**
+     * Non-PK indexes
+     * @param string $aDatabase database/schema name
+     * @param string $aTable table name
+     * @return array
+     */
+    public function getIndexes($aDatabase, $aTable);
+
   }
