@@ -12,17 +12,17 @@
    * @package DB
    */
   abstract class PDODatabase extends \PDO implements DatabaseInterface {
-    
+
     /**
-     * Character to use when quoting identifiers 
+     * Character to use when quoting identifiers
      */
     const IDENTIFIER_OPENQUOTE = '"';
-    
+
     /**
      * Character to use when quoting identifiers
      */
     const IDENTIFIER_CLOSEQUOTE = '"';
-    
+
     /**
      * @param string $aDSN
      * @param string $aUsername
@@ -35,7 +35,7 @@
       self::setAttribute(\PDO::ATTR_STATEMENT_CLASS, array('\DVDoug\DB\PDOStatement'));
       self::setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
     }
-    
+
     /**
      * Executes an SQL statement, returning the result set if any as a StatementInterface object
      * @param string $aSQL the SQL statement to execute.
@@ -44,7 +44,7 @@
     public function query($aSQL) {
       return parent::query($aSQL);
     }
-    
+
     /**
      * Returns the ID of the last inserted row or sequence value
      * @param string $aName name of the sequence object (if any) from which the ID should be returned
@@ -63,7 +63,7 @@
     public function quote($aParam, $aParamType = DatabaseInterface::PARAM_IS_STR) {
       return parent::quote($aParam, $aParamType);
     }
-    
+
     /**
      * Adds appropriate quotes to an identifier so it can be safely used in an SQL statement
      * @param mixed $aIdentifier the parameter to be quoted.
@@ -72,5 +72,5 @@
     public function quoteIdentifier($aIdentifier) {
       return static::IDENTIFIER_OPENQUOTE . $aIdentifier . static::IDENTIFIER_CLOSEQUOTE;
     }
-   
+
   }
