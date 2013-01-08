@@ -29,14 +29,14 @@
     public function fetchAssoc($aAllRows = true, $aGroupByFirstCol = false) {
       if ($aAllRows) {
         if ($aGroupByFirstCol) {
-          return parent::fetchAll(\PDO::FETCH_ASSOC | \PDO::FETCH_GROUP);
+          return $this->fetchAll(\PDO::FETCH_ASSOC | \PDO::FETCH_GROUP);
         }
         else {
-          return parent::fetchAll(\PDO::FETCH_ASSOC);
+          return $this->fetchAll(\PDO::FETCH_ASSOC);
         }
       }
       else {
-        return parent::fetch(\PDO::FETCH_ASSOC);
+        return $this->fetch(\PDO::FETCH_ASSOC);
       }
     }
 
@@ -49,14 +49,14 @@
     public function fetchKeyPair($aAllRows = true, $aGroupByFirstCol = false) {
       if ($aAllRows) {
         if ($aGroupByFirstCol) {
-          return parent::fetchAll(\PDO::FETCH_KEY_PAIR | \PDO::FETCH_GROUP);
+          return $this->fetchAll(\PDO::FETCH_KEY_PAIR | \PDO::FETCH_GROUP);
         }
         else {
-          return parent::fetchAll(\PDO::FETCH_KEY_PAIR);
+          return $this->fetchAll(\PDO::FETCH_KEY_PAIR);
         }
       }
       else {
-        return parent::fetch(\PDO::FETCH_KEY_PAIR);
+        return $this->fetch(\PDO::FETCH_KEY_PAIR);
       }
     }
 
@@ -71,22 +71,22 @@
      */
     public function fetchObj($aClassName = 'stdClass', $aConstructorArguments = array(), $aRunConstructorFirst = true, $aAllRows = true, $aGroupByFirstCol = false) {
       if ($aRunConstructorFirst) {
-        parent::setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $aClassName, $aConstructorArguments);
+        $this->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $aClassName, $aConstructorArguments);
       }
       else {
-        parent::setFetchMode(\PDO::FETCH_CLASS, $aClassName, $aConstructorArguments);
+        $this->setFetchMode(\PDO::FETCH_CLASS, $aClassName, $aConstructorArguments);
       }
-      
+
       if ($aAllRows) {
         if ($aGroupByFirstCol) {
-          return parent::fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_GROUP);
+          return $this->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_GROUP);
         }
         else {
-          return parent::fetchAll(\PDO::FETCH_CLASS);
+          return $this->fetchAll(\PDO::FETCH_CLASS);
         }
       }
       else {
-        return parent::fetch(\PDO::FETCH_CLASS);
+        return $this->fetch(\PDO::FETCH_CLASS);
       }
     }
 
@@ -96,8 +96,8 @@
      * @return array|false
      */
     public function fetchIntoObj($aObject) {
-      parent::setFetchMode(\PDO::FETCH_INTO, $aObject);
-      return parent::fetch(\PDO::FETCH_INTO);
+      $this->setFetchMode(\PDO::FETCH_INTO, $aObject);
+      return $this->fetch(\PDO::FETCH_INTO);
     }
 
     /**
@@ -108,7 +108,7 @@
      * @return bool
      */
     public function bindParamToVariable($aParam, &$aVariable, $aDataType = DatabaseInterface::PARAM_IS_STR) {
-      return parent::bindParam($aParam, $aVariable, $aDataType);
+      return $this->bindParam($aParam, $aVariable, $aDataType);
     }
 
     /**
@@ -119,7 +119,7 @@
      * @return bool
      */
     public function bindResultColumn($aColumn, &$aVariable, $aDataType = DatabaseInterface::PARAM_IS_STR) {
-      return parent::bindColumn($aColumn, $aVariable, $aDataType);
+      return $this->bindColumn($aColumn, $aVariable, $aDataType);
     }
 
     /**
@@ -130,7 +130,7 @@
      * @return bool
      */
     public function bindParamToValue($aParam, $aValue, $aDataType = DatabaseInterface::PARAM_IS_STR) {
-      return parent::bindValue($aParam, $aValue, $aDataType);
+      return $this->bindValue($aParam, $aValue, $aDataType);
     }
 
   }
