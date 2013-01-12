@@ -61,7 +61,7 @@
 
       $columns = array();
       foreach ($result as $row) {
-        $columns[] = new OracleColumnMeta($this, $aDatabase, $aTable, $row['COLUMN_NAME']);
+        $columns[$row['COLUMN_NAME']] = new OracleColumnMeta($this, $aDatabase, $aTable, $row['COLUMN_NAME']);
       }
       return $columns;
     }
