@@ -70,7 +70,7 @@
      * @param $aParamaterType data type hint for drivers
      * @return string a quoted string that is theoretically safe to pass into an SQL statement
      */
-    public function quote($aParam, $aParamType = DatabaseInterface::PARAM_IS_STR);
+    public function quote($aParam, $aParamType = self::PARAM_IS_STR);
 
     /**
      * Adds appropriate quotes to an identifier so it can be safely used in an SQL statement
