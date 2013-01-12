@@ -165,117 +165,7 @@
      * @return string
      */
     public function getMySQLType() {
-      switch ($this->type) {
-      
-        case 'NUMBER':
-          if ($this->scale == 0) {
-            if ($this->minValue >= 0) { //unsigned
-              if (bccomp($this->maxValue, '256') === -1) {
-                return 'TINYINT UNSIGNED';
-              }
-              else if (bccomp($this->maxValue, '65536') === -1) {
-                return 'SMALLINT UNSIGNED';
-              }
-              else if (bccomp($this->maxValue, '16777216') === -1) {
-                return 'MEDIUMINT UNSIGNED';
-              }
-              else if (bccomp($this->maxValue, '4294967296') === -1) {
-                return 'INT UNSIGNED';
-              }
-              else if (bccomp($this->maxValue, '18446744073709551616') === -1) {
-                return 'BIGINT UNSIGNED';
-              }
-              else {
-                return 'NUMERIC';
-              }
-            }
-            else { //signed
-              if (bccomp(max(abs($this->minValue), $this->maxValue), '128') === -1) {
-                return 'TINYINT';
-              }
-              else if (bccomp(max(abs($this->minValue), $this->maxValue), '32768') === -1) {
-                return 'SMALLINT';
-              }
-              else if (bccomp(max(abs($this->minValue), $this->maxValue), '8388608') === -1) {
-                return 'MEDIUMINT';
-              }
-              else if (bccomp(max(abs($this->minValue), $this->maxValue), '2147483648') === -1) {
-                return 'INT';
-              }
-              else if (bccomp(max(abs($this->minValue), $this->maxValue), '9223372036854775808') === -1) {
-                return 'BIGINT';
-              }
-              else {
-                return 'NUMERIC';
-              }
-            }
-          }
-          else {
-            return 'NUMERIC';
-          }
-          break;
-      
-        case 'CHAR':
-          return 'CHAR';
-          break;
-      
-        case 'VARCHAR':
-        case 'VARCHAR2':
-        case 'NVARCHAR':
-        case 'NVARCHAR2':
-          return 'VARCHAR';
-          break;
-          
-        case 'TIMESTAMP':
-        case 'TIMESTAMP WITH TIME ZONE':
-        case 'TIMESTAMP WITH LOCAL TIME ZONE':
-          return 'TIMESTAMP';
-      
-        case 'DATE':
-      
-          /*
-           * Work out whether date or datetime
-           */
-          $query = sprintf("SELECT COUNT(*) AS COUNT FROM %.%s WHERE %s IS NOT NULL AND TO_CHAR(%s, 'SSSSS') > 0",
-                           $this->connection->quoteIdentifier($this->database),
-                           $this->connection->quoteIdentifier($this->table),
-                           $this->connection->quoteIdentifier($this->columnName),
-                           $this->connection->quoteIdentifier($this->columnName));
-          $rows = $this->connection->query($query)->fetchAssoc(false);
-      
-          if ($rows['COUNT'] > 0) {
-            return 'DATETIME';
-          }
-          else {
-            return 'DATE';
-          }
-          break;
-          
-        case 'BINARY_FLOAT':
-          return 'FLOAT';
-          
-        case 'BINARY_DOUBLE':
-          return 'DOUBLE';
-      
-        case 'BLOB':
-        case 'BFILE':
-        case 'LONG RAW':
-        case 'RAW':
-          return 'LONGBLOB';
-          break;
-
-        case 'LONG':
-        case 'CLOB':
-        case 'NCLOB':
-          return 'LONGTEXT';
-          
-        case 'ROWID':
-          return 'LONGTEXT';
-      
-        default:
-          throw new \Exception("Unknown conversion for column type {$this->type}");
-      
-      }
+      return $this->type;
     }
     
     /**
@@ -283,7 +173,60 @@
      * @return string
      */
     public function getOracleType() {
-      return $this->type;
+      switch ($this->type) {
+        case 'BIT':
+        case 'TINYINT':
+        case 'SMALLINT':
+        case 'MEDIUMINT':
+        case 'INT':
+        case 'BIGINT':
+        case 'DECIMAL':
+          return 'NUMBER';
+          
+        case 'FLOAT':
+          return 'BINARY_FLOAT';
+          
+        case 'DOUBLE':
+          return 'BINARY_DOUBLE';
+          
+        case 'DATE':
+        case 'DATETIME':
+          return 'DATE';
+          
+        case 'TIMESTAMP':
+          return 'TIMESTAMP';
+          
+        case 'CHAR':
+        case 'TIME':
+        case 'YEAR':
+          return 'CHAR';
+          
+        case 'ENUM':
+        case 'SET':
+        case 'VARCHAR':
+          return 'NVARCHAR';
+        
+        case 'TINYBLOB':
+        case 'SMALLBLOB':
+        case 'BLOB':
+        case 'MEDIUMBLOB':
+        case 'LONGBLOB':
+        case 'BINARY':
+        case 'VARBINARY':
+          return 'BLOB';
+          
+        case 'TINYTEXT':
+        case 'SMALLTEXT':
+        case 'TEXT':
+        case 'MEDIUMTEXT':
+        case 'LONGTEXT':
+          return 'NCLOB';
+          
+      
+        default:
+          throw new \Exception("Unknown conversion for column type {$this->type}");
+      
+      }
     }
     
     /**
