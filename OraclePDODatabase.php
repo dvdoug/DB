@@ -13,8 +13,9 @@
    */
   class OraclePDODatabase extends PDODatabase {
 
-    public function __construct($aConnectionString, $aUsername, $aPassword) {
-      parent::__construct("oci:dbname={$aConnectionString};charset=AL32UTF8", $aUsername, $aPassword);
+    public function __construct($aConnectionString, $aUsername, $aPassword, $aCharset = 'AL32UTF8') {
+      parent::__construct("oci:dbname={$aConnectionString};charset={$aCharset}", $aUsername, $aPassword);
+      $this->exec("ALTER SESSION SET NLS_DATE_FORMAT='YYYY-MM-DD HH24:MI:SS'");
     }
 
     /**
@@ -51,7 +52,7 @@
      * @return array
      */
     public function getTableColumns($aDatabase, $aTable) {
-      $statement = $this->prepare("SELECT COLUMN_NAME, DATA_TYPE, DATA_LENGTH, DATA_PRECISION, DATA_SCALE, NULLABLE, CHAR_LENGTH FROM ALL_TAB_COLUMNS WHERE OWNER = :owner AND TABLE_NAME = :table_name");
+      $statement = $this->prepare("SELECT COLUMN_NAME FROM ALL_TAB_COLUMNS WHERE OWNER = :owner AND TABLE_NAME = :table_name ORDER BY COLUMN_ID ASC");
       $statement->bindParamToValue(':owner', $aDatabase);
       $statement->bindParamToValue(':table_name', $aTable);
       $statement->execute();
@@ -60,12 +61,7 @@
 
       $columns = array();
       foreach ($result as $row) {
-        $columns[] = array('NAME'        => $row['COLUMN_NAME'],
-                           'TYPE'        => $row['DATA_TYPE'],
-                           'LENGTH'      => $row['CHAR_LENGTH'] ?: $row['DATA_LENGTH'],
-                           'PRECISION'   => $row['DATA_PRECISION'] ?: $row['DATA_LENGTH'],
-                           'SCALE'       => $row['DATA_SCALE'],
-                           'NULLABLE'    => $row['NULLABLE']);
+        $columns[] = new OracleColumnMeta($this, $aDatabase, $aTable, $row['COLUMN_NAME']);
       }
       return $columns;
     }
@@ -137,7 +133,6 @@
           break;
         }
       }
-
 
       return $indexes;
     }
