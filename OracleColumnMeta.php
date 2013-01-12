@@ -249,7 +249,7 @@
           /*
            * Work out whether date or datetime
            */
-          $query = sprintf("SELECT COUNT(*) AS COUNT FROM %.%s WHERE %s IS NOT NULL AND TO_CHAR(%s, 'SSSSS') > 0",
+          $query = sprintf("SELECT COUNT(*) AS COUNT FROM %s.%s WHERE %s IS NOT NULL AND TO_CHAR(%s, 'SSSSS') > 0",
                            $this->connection->quoteIdentifier($this->database),
                            $this->connection->quoteIdentifier($this->table),
                            $this->connection->quoteIdentifier($this->name),
