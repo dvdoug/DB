@@ -49,7 +49,7 @@
      * List of columns (and types) in a table
      * @param string $aDatabase database/schema name
      * @param string $aTable table name
-     * @return array
+     * @return ColumnMetaInterface[]
      */
     public function getTableColumns($aDatabase, $aTable) {
       $statement = $this->prepare("SELECT COLUMN_NAME FROM ALL_TAB_COLUMNS WHERE OWNER = :owner AND TABLE_NAME = :table_name ORDER BY COLUMN_ID ASC");

@@ -90,7 +90,7 @@
      * List of columns (and types) in a table
      * @param string $aDatabase database/schema name
      * @param string $aTable table name
-     * @return array
+     * @return ColumnMetaInterface[]
      */
     public function getTableColumns($aDatabase, $aTable);
 
