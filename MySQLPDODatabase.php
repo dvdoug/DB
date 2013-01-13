@@ -24,12 +24,12 @@
      */
     public function getTables($aDatabase = NULL) {
       if ($aDatabase) {
-        $statement = $this->prepare("SELECT TABLE_SCHEMA, TABLE_NAME FROM INFORMATION_SCHEMA WHERE TABLE_SCHEMA = :database");
+        $statement = $this->prepare("SELECT TABLE_SCHEMA, TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = :database");
         $statement->bindParamToValue(':database', $aDatabase);
         $statement->execute();
       }
       else {
-        $statement = $this->query("SELECT TABLE_SCHEMA, TABLE_NAME FROM INFORMATION_SCHEMA");
+        $statement = $this->query("SELECT TABLE_SCHEMA, TABLE_NAME.TABLES FROM INFORMATION_SCHEMA");
       }
 
       $result = $statement->fetchAssoc(true, true);
