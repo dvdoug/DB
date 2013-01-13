@@ -12,6 +12,7 @@
    * @package DB
    */
   class OracleColumnMeta implements ColumnMetaInterface {
+    use DDLGeneration;
     
     /**
      * Database connection
@@ -239,6 +240,7 @@
           break;
       
         case 'CHAR':
+        case 'NCHAR':
           return 'CHAR';
           break;
       
@@ -314,7 +316,20 @@
      * @return int
      */
     public function getLength() {
-      return $this->length;
+      switch($this->getOriginalType()) {
+        case 'NUMBER':
+        case 'CHAR':
+        case 'NCHAR':
+        case 'VARCHAR':
+        case 'VARCHAR2':
+        case 'NVARCHAR':
+        case 'NVARCHAR2':
+        case 'BINARY_FLOAT':
+        case 'BINARY_DOUBLE':
+          return $this->length;
+        default:
+          return;
+      }
     }
     
     /**
@@ -363,5 +378,5 @@
      */
     public function getDistinctValueCount() {
       return $this->distinctValues;
-    }
+    }    
   }

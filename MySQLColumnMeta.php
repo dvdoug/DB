@@ -12,6 +12,7 @@
    * @package DB
    */
   class MySQLColumnMeta implements ColumnMetaInterface {
+    use DDLGeneration;
     
     /**
      * Database connection
@@ -234,7 +235,24 @@
      * @return int
      */
     public function getLength() {
-      return $this->length;
+      switch($this->getOriginalType()) {
+        case 'BIT':
+        case 'TINYINT':
+        case 'SMALLINT':
+        case 'MEDIUMINT':
+        case 'INT':
+        case 'BIGINT':
+        case 'DECIMAL':
+        case 'FLOAT':
+        case 'DOUBLE':
+        case 'CHAR':
+        case 'TIME':
+        case 'YEAR':
+        case 'VARCHAR':
+          return $this->length;
+        default:
+          return;
+      }
     }
     
     /**

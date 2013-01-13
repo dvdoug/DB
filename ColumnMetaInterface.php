@@ -87,4 +87,14 @@
      * @return int
      */
     public function getDistinctValueCount();
+    
+    /**
+     * Get MySQL column definition
+     */
+    public function getMySQLColumnDef();
+    
+    /**
+     * Get Oracle column definition
+     */
+    public function getOracleColumnDef();
   }
