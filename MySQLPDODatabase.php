@@ -13,6 +13,16 @@
    */
   class MySQLPDODatabase extends PDODatabase {
 
+    /**
+     * Character to use when quoting identifiers
+     */
+    const IDENTIFIER_OPENQUOTE = '`';
+
+    /**
+     * Character to use when quoting identifiers
+     */
+    const IDENTIFIER_CLOSEQUOTE = '`';
+
     public function __construct($aHost, $aPort, $aDefaultDatabase, $aUsername, $aPassword, $aCharset = 'utf8') {
       parent::__construct("mysql:host={$aHost};port={$aPort};dbname={$aDefaultDatabase};charset={$aCharset}", $aUsername, $aPassword);
     }
@@ -51,13 +61,12 @@
      * @return ColumnMetaInterface[]
      */
     public function getTableColumns($aDatabase, $aTable) {
-      $statement = $this->prepare("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = :database AND TABLE_NAME = :table_name ORDER BY ORDINAL_ID ASC");
+      $statement = $this->prepare("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = :database AND TABLE_NAME = :table_name ORDER BY ORDINAL_POSITION ASC");
       $statement->bindParamToValue(':database', $aDatabase);
       $statement->bindParamToValue(':table_name', $aTable);
       $statement->execute();
 
       $result = $statement->fetchAssoc();
-
       $columns = array();
       foreach ($result as $row) {
         $columns[$row['COLUMN_NAME']] = new MySQLColumnMeta($this, $aDatabase, $aTable, $row['COLUMN_NAME']);
@@ -77,7 +86,7 @@
                      FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
                      WHERE KEY_COLUMN_USAGE.CONSTRAINT_SCHEMA = :database
                            AND KEY_COLUMN_USAGE.TABLE_NAME = :table_name
-                           AND KEY_COLUMN_USAGE.NAME = 'PRIMARY'
+                           AND KEY_COLUMN_USAGE.CONSTRAINT_NAME = 'PRIMARY'
                      ORDER BY ORDINAL_POSITION";
       $statement = $this->prepare($SQL);
       $statement->bindParamToValue(':database', $aDatabase);
@@ -100,12 +109,12 @@
     public function getIndexes($aDatabase, $aTable) {
 
       $indexes = array();
-      $SQL = "SELECT CONSTRAINT_NAME, COLUMN_NAME
-                     FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
-                     WHERE KEY_COLUMN_USAGE.CONSTRAINT_SCHEMA = :database
-                           AND KEY_COLUMN_USAGE.TABLE_NAME = :table_name
-                           AND KEY_COLUMN_USAGE.REFERENCED_TABLE_SCHEMA IS NULL
-                     ORDER BY ORDINAL_POSITION";
+      $SQL = "SELECT INDEX_NAME, COLUMN_NAME
+                     FROM INFORMATION_SCHEMA.STATISTICS
+                     WHERE TABLE_SCHEMA = :database
+                           AND TABLE_NAME = :table_name
+                           AND INDEX_NAME != 'PRIMARY'
+                     ORDER BY INDEX_NAME ASC, SEQ_IN_INDEX ASC";
       $statement = $this->prepare($SQL);
       $statement->bindParamToValue(':database', $aDatabase);
       $statement->bindParamToValue(':table_name', $aTable);
