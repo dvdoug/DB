@@ -132,5 +132,4 @@
     public function bindParamToValue($aParam, $aValue, $aDataType = DatabaseInterface::PARAM_IS_STR) {
       return $this->bindValue($aParam, $aValue, $aDataType);
     }
-
   }

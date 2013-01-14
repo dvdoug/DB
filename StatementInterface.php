@@ -90,5 +90,4 @@
      * @return bool
      */
     public function closeCursor();
-
   }
