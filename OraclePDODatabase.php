@@ -108,7 +108,7 @@
                    FROM ALL_IND_COLUMNS
                    WHERE TABLE_NAME = :table_name
                          AND TABLE_OWNER = :database_name
-                   ORDER BY COLUMN_POSITION ASC";
+                   ORDER BY INDEX_NAME ASC, COLUMN_POSITION ASC";
       $statement = $this->prepare($SQL);
       $statement->bindParamToValue(':table_name', $aTable);
       $statement->bindParamToValue(':database_name', $aDatabase);
@@ -136,5 +136,4 @@
 
       return $indexes;
     }
-
   }
