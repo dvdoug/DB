@@ -110,4 +110,21 @@
      */
     public function getIndexes($aDatabase, $aTable);
 
+    /**
+     * Get MySQL table definition
+     * @param string $aDatabase database/schema name
+     * @param string $aTable table name
+     * @param bool $aSkipUnusedCols whether to skip unused columns
+     * @return string
+     */
+    public function getMySQLTableDef($aDatabase, $aTable, $aSkipUnusedCols = true);
+
+    /**
+     * Get Oracle table definition
+     * @param string $aDatabase database/schema name
+     * @param string $aTable table name
+     * @param bool $aSkipUnusedCols whether to skip unused columns
+     * @return string
+     */
+    public function getOracleTableDef($aDatabase, $aTable, $aSkipUnusedCols = true);
   }
