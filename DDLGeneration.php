@@ -12,7 +12,7 @@
    * @package DB
    */
   trait DDLGeneration {
-    
+
     /**
      * Get MySQL column definition
      */
@@ -26,16 +26,17 @@
       else {
         $unsigned = false;
       }
-      
-      if (in_array($MySQLType, array('CHAR', 'VARCHAR')) && $this->getDistinctValueCount() <= 16) {
-        $query = sprintf("SELECT DISTINCT %s FROM %s.%s WHERE %s IS NOT NULL",
+
+      if ($MySQLType == 'ENUM' || (in_array($MySQLType, array('CHAR', 'VARCHAR')) && $this->getDistinctValueCount() <= 16)) {
+        $query = sprintf("SELECT DISTINCT %s FROM %s.%s WHERE %s IS NOT NULL ORDER BY %s ASC",
                          $this->connection->quoteIdentifier($this->name),
                          $this->connection->quoteIdentifier($this->database),
                          $this->connection->quoteIdentifier($this->table),
+                         $this->connection->quoteIdentifier($this->name),
                          $this->connection->quoteIdentifier($this->name));
         $values = array();
         foreach ($this->connection->query($query) as $value) {
-          $values[] = $value[$this->name];
+          $values[] = trim($value[$this->name]);
         }
 
         if ($values) {
@@ -49,40 +50,40 @@
       }
       else {
         $def .= $MySQLType;
-        
+
         if ($this->getScale()) {
           $def .= '(' . $this->getPrecision() . ',' . $this->getScale() . ')';
         }
-        else if ($this->getPrecision()) {
+        else if ($this->getPrecision() && strpos($MySQLType, 'INT') === false) {
           $def .= '(' . $this->getPrecision() . ')';
         }
-        else if ($this->getLength()) {
+        else if ($this->getLength() && strpos($MySQLType, 'INT') === false) {
           $def .= '(' . $this->getLength() . ')';
         }
-        
+
         if ($unsigned) {
           $def .= ' UNSIGNED';
         }
       }
-      
+
       if ($this->isNullable()) {
         $def .= ' NULL';
       }
       else {
         $def .= ' NOT NULL';
       }
-      
+
       return $def;
     }
-    
+
     /**
      * Get Oracle column definition
      */
     public function getOracleColumnDef() {
       $def = '`' . strtolower($this->getName()) . '` ';
-     
+
       $def .= $this->getOracleType();
-      
+
       if ($this->getScale()) {
         $def .= '(' . $this->getPrecision() . ',' . $this->getScale() . ')';
       }
@@ -92,14 +93,14 @@
       else if ($this->getLength()) {
         $def .= '(' . $this->getLength() . ')';
       }
-         
+
       if ($this->isNullable()) {
         $def .= ' NULL';
       }
       else {
         $def .= ' NOT NULL';
       }
-      
+
       return $def;
     }
   }
