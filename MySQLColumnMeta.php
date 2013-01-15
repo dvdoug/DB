@@ -133,10 +133,11 @@
       /*
        * Metadata from the data stored
        */
-      $query = sprintf("SELECT COUNT(DISTINCT %s) AS COUNT FROM %s.%s",
+      $query = sprintf("SELECT COUNT(*) AS COUNT FROM (SELECT %s FROM %s.%s GROUP BY %s) distinctvalues",
                        $this->connection->quoteIdentifier($this->name),
                        $this->connection->quoteIdentifier($this->database),
-                       $this->connection->quoteIdentifier($this->table));
+                       $this->connection->quoteIdentifier($this->table),
+                       $this->connection->quoteIdentifier($this->name));
       $this->distinctValues = $this->connection->query($query)->fetchAssoc(false)['COUNT'];
 
       $query = sprintf("SELECT MIN(%s) AS ROWMIN, MAX(%s) AS ROWMAX FROM %s.%s WHERE %s IS NOT NULL",
