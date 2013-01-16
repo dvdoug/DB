@@ -23,7 +23,7 @@
      */
     const IDENTIFIER_CLOSEQUOTE = '`';
 
-    public function __construct($aHost, $aPort, $aDefaultDatabase, $aUsername, $aPassword, $aCharset = 'utf8') {
+    public function __construct($aHost, $aPort, $aDefaultDatabase, $aUsername, $aPassword, $aCharset = 'utf8mb4') {
       parent::__construct("mysql:host={$aHost};port={$aPort};dbname={$aDefaultDatabase};charset={$aCharset}", $aUsername, $aPassword);
     }
 
