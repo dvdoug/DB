@@ -18,7 +18,7 @@
      * @param DatabaseInterface $aConnection connection to database
      * @param string $aDatabase database/schema name
      * @param string $aTable table name
-     * @param string $aColumn column name
+     * @param string $aColumnName column name
      */
     public function __construct(DatabaseInterface $aConnection, $aDatabase, $aTable, $aColumnName);
 

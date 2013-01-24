@@ -24,6 +24,7 @@
     const IDENTIFIER_CLOSEQUOTE = '"';
 
     /**
+     * Constructor
      * @param string $aDSN
      * @param string $aUsername
      * @param string $aPassword

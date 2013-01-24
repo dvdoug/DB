@@ -23,6 +23,15 @@
      */
     const IDENTIFIER_CLOSEQUOTE = '`';
 
+    /**
+     * Constructor
+     * @param string $aHost hostname to connect to 
+     * @param int $aPort port number to connect to
+     * @param string $aDefaultDatabase name of default database to use
+     * @param string $aUsername connection username
+     * @param string $aPassword connection password
+     * @param string $aCharset connection character set
+     */
     public function __construct($aHost, $aPort, $aDefaultDatabase, $aUsername, $aPassword, $aCharset = 'utf8mb4') {
       parent::__construct("mysql:host={$aHost};port={$aPort};dbname={$aDefaultDatabase};charset={$aCharset}", $aUsername, $aPassword);
     }

@@ -13,6 +13,13 @@
    */
   class OraclePDODatabase extends PDODatabase {
 
+    /**
+     * Constructor
+     * @param string $aConnectionString Oracle connection string with host/port/service name etc
+     * @param string $aUsername connection username
+     * @param string $aPassword connection password
+     * @param string $aCharset connection character set
+     */
     public function __construct($aConnectionString, $aUsername, $aPassword, $aCharset = 'AL32UTF8') {
       parent::__construct("oci:dbname={$aConnectionString};charset={$aCharset}", $aUsername, $aPassword);
       $this->exec("ALTER SESSION SET NLS_DATE_FORMAT='YYYY-MM-DD HH24:MI:SS'");
