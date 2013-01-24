@@ -25,7 +25,7 @@
      */
     public function getTables($aDatabase = NULL) {
       if ($aDatabase) {
-        $statement = $this->prepare("SELECT OWNER, TABLE_NAME FROM ALL_TABLES WHERE OWNER = :owner");
+        $statement = $this->prepare("SELECT OWNER, TABLE_NAME FROM ALL_TABLES WHERE OWNER = :owner ORDER BY TABLE_NAME ASC");
         $statement->bindParamToValue(':owner', $aDatabase);
         $statement->execute();
       }

@@ -34,7 +34,7 @@
      */
     public function getTables($aDatabase = NULL) {
       if ($aDatabase) {
-        $statement = $this->prepare("SELECT TABLE_SCHEMA, TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = :database");
+        $statement = $this->prepare("SELECT TABLE_SCHEMA, TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = :database ORDER BY TABLE_NAME ASC");
         $statement->bindParamToValue(':database', $aDatabase);
         $statement->execute();
       }
