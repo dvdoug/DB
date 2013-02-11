@@ -43,6 +43,10 @@
           $def .= 'ENUM';
           $def .= '(' . join(",", array_map(function($c) {return "'".addslashes($c)."'";}, $values)) . ') BINARY';
         }
+        else if (in_array($MySQLType, array('DATETIME', 'TIMESTAMP', 'TIME'))) {
+          $def .= $MySQLType;
+          $def .= '(' . (int)$this->getScale() . ')';
+        }
         else {
           $def .= $MySQLType;
           $def .= '(' . $this->getLength() . ')';

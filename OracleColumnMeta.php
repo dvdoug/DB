@@ -245,8 +245,13 @@
         case 'TIMESTAMP':
         case 'TIMESTAMP WITH TIME ZONE':
         case 'TIMESTAMP WITH LOCAL TIME ZONE':
-          return 'TIMESTAMP';
-
+          if ($this->minValue >= '1970-01-01 00:00:01' && $this->maxValue <= '2038-01-19 03:14:07') {
+            return 'TIMESTAMP';
+          }
+          else {
+            return 'DATETIME';
+          }
+                 
         case 'DATE':
 
           /*

@@ -106,7 +106,7 @@
       $statement = $this->connection->prepare("SELECT DATA_TYPE,
                                                       CHARACTER_MAXIMUM_LENGTH,
                                                       NUMERIC_PRECISION,
-                                                      NUMERIC_SCALE,
+                                                      COALESCE(DATETIME_PRECISION, NUMERIC_SCALE) AS SCALE,
                                                       IS_NULLABLE,
                                                       COLUMN_TYPE
                                                FROM INFORMATION_SCHEMA.COLUMNS
@@ -123,7 +123,7 @@
       $this->type = strtoupper($meta['DATA_TYPE']);
       $this->length = $meta['CHARACTER_MAXIMUM_LENGTH'] ?: $meta['NUMERIC_PRECISION'];
       $this->precision = $meta['NUMERIC_PRECISION'];
-      $this->scale = $meta['NUMERIC_SCALE'];
+      $this->scale = $meta['SCALE'];
       $this->isNullable = ($meta['IS_NULLABLE'] == 'YES');
 
       if (strpos($meta['COLUMN_TYPE'], 'unsigned') !== false) {
@@ -206,7 +206,12 @@
 
         case 'DATE':
         case 'DATETIME':
-          return 'DATE';
+          if ($this->precision) {
+            return 'TIMESTAMP';
+          }
+          else {
+            return 'DATE';
+          }
 
         case 'TIMESTAMP':
           return 'TIMESTAMP';
