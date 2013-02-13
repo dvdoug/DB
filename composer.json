@@ -16,5 +16,6 @@
         "psr-0": {
             "DVDoug\\DB": ""
         }
-    }
+    },
+    "target-dir": "DVDoug/DB"
 }
