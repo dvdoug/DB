@@ -1,8 +1,8 @@
 {
     "name": "dvdoug/db",
-    "description": "DB layer...",
+    "description": "PDO-like DB access, plus helper methods",
     "keywords": ["db","schema"],
-    "homepage": "PDO-like DB access, plus helper methods",
+    "homepage": "https://github.com/dvdoug/DB",
     "license": "MIT",
     "require": {
         "php": ">=5.3.0",
