@@ -116,13 +116,13 @@
       $primaryKey = $this->getPrimaryKey($aDatabase, $aTable);
       $indexes = $this->getIndexes($aDatabase, $aTable);
 
-      $tableDef = "CREATE TABLE `{$table}` (\r\n";
-      $tableDef .= join(", \r\n", $colDefs);
+      $tableDef = "CREATE TABLE `{$table}` (" . PHP_EOL;
+      $tableDef .= join(',' . PHP_EOL, $colDefs);
 
       if ($primaryKey) {
-        $tableDef .= ",\r\n\r\n";
+        $tableDef .= ',' . PHP_EOL . PHP_EOL;
         $tableDef .= 'PRIMARY KEY (';
-        $tableDef .= join(", \r\n", array_map(function($c) {return '`'.strtolower($c).'`';}, $primaryKey));
+        $tableDef .= join(', ' . PHP_EOL, array_map(function($c) {return '`'.strtolower($c).'`';}, $primaryKey));
         $tableDef .= ')';
       }
 
@@ -133,7 +133,7 @@
               continue 2;
             }
           }
-          $tableDef .= ",\r\n";
+          $tableDef .= ',' . PHP_EOL;
           $tableDef .= 'KEY `' . strtolower($indexName) . '` (';
           $tableDef .= join(", ", array_map(function($c) {return '`'.strtolower($c).'`';}, $indexColumns));
           $tableDef .= ')';
@@ -173,13 +173,13 @@
       $primaryKey = $this->getPrimaryKey($aDatabase, $aTable);
       $indexes = $this->getIndexes($aDatabase, $aTable);
 
-      $tableDef = "CREATE TABLE `{$table}` (\r\n";
-      $tableDef .= join(", \r\n", $colDefs);
+      $tableDef = "CREATE TABLE `{$table}` (" . PHP_EOL;
+      $tableDef .= join(',' . PHP_EOL, $colDefs);
 
       if ($primaryKey) {
-        $tableDef .= ",\r\n\r\n";
+        $tableDef .= ',' . PHP_EOL . PHP_EOL;
         $tableDef .= 'PRIMARY KEY (';
-        $tableDef .= join(", \r\n", array_map(function($c) {return '"'.strtolower($c).'"';}, $primaryKey));
+        $tableDef .= join(', ' . PHP_EOL, array_map(function($c) {return '"'.strtolower($c).'"';}, $primaryKey));
         $tableDef .= ')';
       }
 
@@ -190,9 +190,9 @@
               continue 2;
             }
           }
-          $tableDef .= ",\r\n";
+          $tableDef .= ',' . PHP_EOL;
           $tableDef .= 'KEY `' . strtolower($indexName) . '` (';
-          $tableDef .= join(", ", array_map(function($c) {return '"'.strtolower($c).'"';}, $indexColumns));
+          $tableDef .= join(', ', array_map(function($c) {return '"'.strtolower($c).'"';}, $indexColumns));
           $tableDef .= ')';
         }
       }
