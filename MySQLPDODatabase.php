@@ -48,7 +48,7 @@
         $statement->execute();
       }
       else {
-        $statement = $this->query("SELECT TABLE_SCHEMA, TABLE_NAME.TABLES FROM INFORMATION_SCHEMA");
+        $statement = $this->query("SELECT TABLE_SCHEMA, TABLE_NAME FROM INFORMATION_SCHEMA.TABLES");
       }
 
       $result = $statement->fetchAssoc(true, true);
