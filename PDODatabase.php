@@ -62,7 +62,20 @@
      * @return string a quoted string that is theoretically safe to pass into an SQL statement
      */
     public function escape($aParam, $aParamType = DatabaseInterface::PARAM_IS_STR) {
-      return parent::quote($aParam, $aParamType);
+      switch ($aParamType) {
+      
+        case self::PARAM_IS_INT:
+          if (is_int($aParam) || ctype_digit($aParam)) {
+            return (int)$aParam;
+          }
+          else {
+            throw new \RuntimeException("Parameter {$aParam} is not an integer");
+          }
+          break;
+          
+        default:
+          return parent::quote($aParam, $aParamType);
+      }
     }
 
     /**
