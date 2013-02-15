@@ -56,12 +56,12 @@
     }
 
     /**
-     * Quotes a parameter for use in a query
+     * Escapes/quotes a parameter for use in a query
      * @param mixed $aParam the parameter to be quoted.
      * @param $aParamaterType data type hint for drivers
      * @return string a quoted string that is theoretically safe to pass into an SQL statement
      */
-    public function quote($aParam, $aParamType = DatabaseInterface::PARAM_IS_STR) {
+    public function escape($aParam, $aParamType = DatabaseInterface::PARAM_IS_STR) {
       return parent::quote($aParam, $aParamType);
     }
 

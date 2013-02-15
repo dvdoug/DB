@@ -16,7 +16,7 @@
     const PARAM_IS_NULL = 0;
     const PARAM_IS_INT = 1;
     const PARAM_IS_STR = 2;
-    const PARAM_IS_LOB = 3;
+    const PARAM_IS_BLOB = 3;
     const PARAM_IS_BOOL = 5;
 
     /**
@@ -65,12 +65,12 @@
     public function getLastInsertId($aName = NULL);
 
     /**
-     * Quotes a parameter for use in a query
+     * Escapes/quotes a parameter for use in a query
      * @param mixed $aParam the parameter to be quoted.
      * @param $aParamaterType data type hint for drivers
      * @return string a quoted string that is theoretically safe to pass into an SQL statement
      */
-    public function quote($aParam, $aParamType = self::PARAM_IS_STR);
+    public function escape($aParam, $aParamType = self::PARAM_IS_STR);
 
     /**
      * Adds appropriate quotes to an identifier so it can be safely used in an SQL statement
