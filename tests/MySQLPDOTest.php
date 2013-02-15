@@ -94,7 +94,7 @@
     /**
      * @depends testConnect
      */
-    public function testIntegerSchemasAllCols() {
+    public function testIntegerMySQLSchemaAllCols() {
       $this->setUpDB();
     
       $expected = <<<ENDSCHEMA
@@ -117,6 +117,35 @@ ENDSCHEMA;
      
       $actual = self::$conn->getMySQLTableDef('test', 'test_integers', false);
    
+      self::assertEquals($expected, $actual);
+    }
+    
+    /**
+     * @depends testConnect
+     */
+    public function testIntegerOracleSchemaAllCols() {
+      $this->setUpDB();
+    
+      $expected = <<<ENDSCHEMA
+CREATE TABLE `test_integers` (
+`tinyint` NUMBER(3) NOT NULL,
+`smallint` NUMBER(5) NOT NULL,
+`mediumint` NUMBER(7) NOT NULL,
+`int` NUMBER(10) NOT NULL,
+`bigint` NUMBER(19) NOT NULL,
+`tinyint_unsigned` NUMBER(3) NOT NULL,
+`smallint_unsigned` NUMBER(5) NOT NULL,
+`mediumint_unsigned` NUMBER(7) NOT NULL,
+`int_unsigned` NUMBER(10) NOT NULL,
+`bigint_unsigned` NUMBER(20) NOT NULL,
+`int_null` NUMBER(10) NULL,
+`int_unsigned_null` NUMBER(10) NULL,
+`int_default_null` NUMBER(10) NULL,
+`int_default_12345` NUMBER(10) NOT NULL) ENGINE=InnoDB ROW_FORMAT=COMPRESSED
+ENDSCHEMA;
+       
+      $actual = self::$conn->getOracleTableDef('test', 'test_integers', false);
+  
       self::assertEquals($expected, $actual);
     }
     
