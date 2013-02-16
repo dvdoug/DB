@@ -34,11 +34,8 @@
             $this->connection->escape($this->name));
       
         $statement = $this->connection->query($query);
-        $values = explode(',,', str_replace("','", "',,'", preg_replace('/^(enum|set)\((.*)\)$/', '$2', $statement->fetchAssoc(false)['Type'])));
-      
-        foreach ($values as &$value) {
-          $value = str_replace("''", "'", trim($value, "'"));
-        }
+        $values = $statement->fetchAssoc(false)['Type'];
+        $values = explode("','", substr($values, strpos($values, '(') + 2, -2));
         asort($values);
       
         $def .= $MySQLType;
