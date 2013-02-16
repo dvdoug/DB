@@ -29,6 +29,11 @@
     public static $conn;
     
     public function testConnect() {
+      
+      if (!extension_loaded('pdo_mysql')) {
+        $this->markTestSkipped();
+      }
+      
       static::$conn = new MySQLPDODatabase('localhost', 3306, 'test', 'test', 'test');
       self::assertTrue(self::$conn instanceof DatabaseInterface);
     }
@@ -71,7 +76,7 @@
     public function testGetTablesForOneDB() {
       $this->setUpDB();
       
-      $expected = array('test_integers');
+      $expected = array('test_integers', 'test_strings');
       $actual = self::$conn->getTables('test');
 
       self::assertEquals($expected, $actual);
@@ -83,7 +88,7 @@
     public function testGetTablesForAllDBs() {
       $this->setUpDB();
       
-      $expected = array('test'=> array('test_integers'));
+      $expected = array('test'=> array('test_integers', 'test_strings'));
       
       $actual = self::$conn->getTables();
       unset($actual['information_schema']); //too variable
@@ -141,11 +146,57 @@ CREATE TABLE `test_integers` (
 `int_null` NUMBER(10) NULL,
 `int_unsigned_null` NUMBER(10) NULL,
 `int_default_null` NUMBER(10) NULL,
-`int_default_12345` NUMBER(10) NOT NULL) ENGINE=InnoDB ROW_FORMAT=COMPRESSED
+`int_default_12345` NUMBER(10) NOT NULL)
 ENDSCHEMA;
        
       $actual = self::$conn->getOracleTableDef('test', 'test_integers', false);
   
+      self::assertEquals($expected, $actual);
+    }
+    
+    /**
+     * @depends testConnect
+     */
+    public function testStringMySQLSchemaAllCols() {
+      $this->setUpDB();
+    
+      $expected = <<<ENDSCHEMA
+CREATE TABLE `test_strings` (
+`varchar` VARCHAR(12) NOT NULL,
+`char` ENUM('foo1', 'foo10', 'foo2', 'foo3', 'foo4', 'foo5', 'foo6', 'foo7', 'foo8', 'foo9') NOT NULL,
+`varchar_null` VARCHAR(45) NULL,
+`char_null` CHAR(67) NULL,
+`enum` ENUM('abc', 'def') NOT NULL,
+`enum_null` ENUM('hij', 'klm') NULL,
+`set` SET('nop', 'qrs') NOT NULL,
+`set_null` SET('tuv', 'wxyz') NULL) ENGINE=InnoDB ROW_FORMAT=COMPRESSED
+ENDSCHEMA;
+       
+      $actual = self::$conn->getMySQLTableDef('test', 'test_strings', false);
+  
+      self::assertEquals($expected, $actual);
+    }
+    
+    /**
+     * @depends testConnect
+     */
+    public function testStringOracleSchemaAllCols() {
+      $this->setUpDB();
+    
+      $expected = <<<ENDSCHEMA
+CREATE TABLE `test_strings` (
+`varchar` NVARCHAR(12) NOT NULL,
+`char` CHAR(34) NOT NULL,
+`varchar_null` NVARCHAR(45) NULL,
+`char_null` CHAR(67) NULL,
+`enum` NVARCHAR NOT NULL,
+`enum_null` NVARCHAR NULL,
+`set` NVARCHAR NOT NULL,
+`set_null` NVARCHAR NULL)
+ENDSCHEMA;
+    
+      $actual = self::$conn->getOracleTableDef('test', 'test_strings', false);
+    
       self::assertEquals($expected, $actual);
     }
     
