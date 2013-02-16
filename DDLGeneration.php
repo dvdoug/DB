@@ -26,11 +26,25 @@
       else {
         $unsigned = false;
       }
-
-      /*
-       * Optimise string column storage where possible
-       */
-      if ($MySQLType == 'ENUM' || (in_array($MySQLType, array('CHAR', 'VARCHAR')) && $this->getDistinctValueCount() <= 16)) {
+      
+      if (in_array($MySQLType, array('ENUM', 'SET'))) {
+        $query = sprintf("SHOW COLUMNS FROM %s.%s LIKE %s",
+            $this->connection->quoteIdentifier($this->database),
+            $this->connection->quoteIdentifier($this->table),
+            $this->connection->escape($this->name));
+      
+        $statement = $this->connection->query($query);
+        $values = explode(',,', str_replace("','", "',,'", preg_replace('/^(enum|set)\((.*)\)$/', '$2', $statement->fetchAssoc(false)['Type'])));
+      
+        foreach ($values as &$value) {
+          $value = str_replace("''", "'", trim($value, "'"));
+        }
+        asort($values);
+      
+        $def .= $MySQLType;
+        $def .= '(' . join(', ', array_map(function($c) {return "'".addslashes($c)."'";}, $values)) . ')';
+      }
+      else if (in_array($MySQLType, array('CHAR', 'VARCHAR')) && $this->getDistinctValueCount() <= 16) {
         $query = sprintf("SELECT DISTINCT %s FROM %s.%s WHERE %s IS NOT NULL ORDER BY %s ASC",
                          $this->connection->quoteIdentifier($this->name),
                          $this->connection->quoteIdentifier($this->database),
@@ -50,23 +64,6 @@
           $def .= $MySQLType;
           $def .= '(' . $this->getLength() . ')';
         }
-      }
-      else if ($MySQLType == 'SET') {
-        $query = sprintf("SHOW COLUMNS FROM %s.%s LIKE %s",
-                         $this->connection->quoteIdentifier($this->database),
-                         $this->connection->quoteIdentifier($this->table),
-                         $this->connection->escape($this->name));
-        
-        $statement = $this->connection->query($query);
-        $values = explode(',,', str_replace("','", "',,'", preg_replace('/^(enum|set)\((.*)\)$/', '$2', $statement->fetchAssoc(false)['Type'])));
-        
-        foreach ($values as &$value) {
-          $value = str_replace("''", "'", trim($value, "'"));
-        }
-        asort($values);
-        
-        $def .= 'SET';
-        $def .= '(' . join(', ', array_map(function($c) {return "'".addslashes($c)."'";}, $values)) . ')';
       }
       else if (in_array($MySQLType, array('DATETIME', 'TIMESTAMP', 'TIME'))) {
         $def .= $MySQLType;
