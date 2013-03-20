@@ -167,3 +167,4 @@ pip-log.txt
 /composer.lock
 
 /tests/coverage
+.idea
