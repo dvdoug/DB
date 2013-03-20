@@ -103,7 +103,10 @@
       /*
        * Basic metadata from the schema
        */
-      $statement = $this->connection->prepare("SELECT DATA_TYPE,
+      $statement = $this->connection->prepare("SELECT OWNER AS TABLE_SCHEMA,
+                                                      TABLE_NAME,
+                                                      COLUMN_NAME, 
+                                                      DATA_TYPE,
                                                       DATA_LENGTH,
                                                       DATA_PRECISION,
                                                       DATA_SCALE,

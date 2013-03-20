@@ -103,7 +103,10 @@
       /*
        * Basic metadata from the schema
        */
-      $statement = $this->connection->prepare("SELECT DATA_TYPE,
+      $statement = $this->connection->prepare("SELECT TABLE_SCHEMA,
+                                                      TABLE_NAME,
+                                                      COLUMN_NAME, 
+                                                      DATA_TYPE,
                                                       CHARACTER_MAXIMUM_LENGTH,
                                                       NUMERIC_PRECISION,
                                                       COALESCE(DATETIME_PRECISION, NUMERIC_SCALE) AS SCALE,
