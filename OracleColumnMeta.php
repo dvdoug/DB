@@ -105,7 +105,7 @@
        */
       $statement = $this->connection->prepare("SELECT OWNER AS TABLE_SCHEMA,
                                                       TABLE_NAME,
-                                                      COLUMN_NAME, 
+                                                      COLUMN_NAME,
                                                       DATA_TYPE,
                                                       DATA_LENGTH,
                                                       DATA_PRECISION,
@@ -254,7 +254,7 @@
           else {
             return 'DATETIME';
           }
-                 
+
         case 'DATE':
 
           /*
