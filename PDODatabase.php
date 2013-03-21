@@ -34,7 +34,6 @@
       parent::__construct($aDSN, $aUsername, $aPassword, $aDriverOptions);
       self::setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
       self::setAttribute(\PDO::ATTR_STATEMENT_CLASS, array('\DVDoug\DB\PDOStatement'));
-      self::setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
     }
 
     /**
@@ -63,7 +62,7 @@
      */
     public function escape($aParam, $aParamType = DatabaseInterface::PARAM_IS_STR) {
       switch ($aParamType) {
-      
+
         case self::PARAM_IS_INT:
           if (is_int($aParam) || ctype_digit($aParam)) {
             return (int)$aParam;
@@ -72,7 +71,7 @@
             throw new \RuntimeException("Parameter {$aParam} is not an integer");
           }
           break;
-          
+
         default:
           return parent::quote($aParam, $aParamType);
       }
@@ -120,16 +119,32 @@
       $tableDef .= join(',' . PHP_EOL, $colDefs);
 
       if ($primaryKey) {
-        $tableDef .= ',' . PHP_EOL . PHP_EOL;
-        $tableDef .= 'PRIMARY KEY (';
-        $tableDef .= join(', ' . PHP_EOL, array_map(function($c) {return '`'.strtolower($c).'`';}, $primaryKey));
-        $tableDef .= ')';
+        $length = 0;
+        foreach ($primaryKey as $primaryCol) {
+          $length += $columns[$primaryCol]->getLength();
+        }
+        if ($length <= 191) { //skip index if too long for MySQL
+          $tableDef .= ',' . PHP_EOL . PHP_EOL;
+          $tableDef .= 'PRIMARY KEY (';
+          $tableDef .= join(', ' . PHP_EOL, array_map(function($c) {return '`'.strtolower($c).'`';}, $primaryKey));
+          $tableDef .= ')';
+        }
       }
 
       if ($indexes) {
         foreach ($indexes as $indexName => $indexColumns) {
+          $length = 0;
           foreach ($indexColumns as &$col) {
             if (!in_array($col, array_keys($columns))) { //skip index if it includes a skipped column
+              continue 2;
+            }
+
+            $length += $columns[$col]->getLength();
+            if ($length > 191) { //skip index if too long for MySQL
+              continue 2;
+            }
+
+            if (preg_match('/(BLOB|TEXT)$/', $columns[$col]->getMySQLType())) {
               continue 2;
             }
           }

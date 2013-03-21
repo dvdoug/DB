@@ -7,36 +7,34 @@
   namespace DVDoug\DB;
 
   /**
-   * MySQL database connection (PDO)
+   * MSSQL database connection (PDO)
    * @author Doug Wright
    * @package DB
    */
-  class MySQLPDODatabase extends PDODatabase {
+  class MSSQLPDODatabase extends PDODatabase {
 
     /**
      * Character to use when quoting identifiers
      */
-    const IDENTIFIER_OPENQUOTE = '`';
+    const IDENTIFIER_OPENQUOTE = '"';
 
     /**
      * Character to use when quoting identifiers
      */
-    const IDENTIFIER_CLOSEQUOTE = '`';
+    const IDENTIFIER_CLOSEQUOTE = '"';
 
     /**
      * Constructor
-     * @param string $aHost hostname to connect to 
+     * @param string $aHost hostname to connect to
      * @param int $aPort port number to connect to
      * @param string $aDefaultDatabase name of default database to use
      * @param string $aUsername connection username
      * @param string $aPassword connection password
-     * @param string $aCharset connection character set
      */
-    public function __construct($aHost, $aPort, $aDefaultDatabase, $aUsername, $aPassword, $aCharset = 'utf8mb4') {
-      parent::__construct("mysql:host={$aHost};port={$aPort};dbname={$aDefaultDatabase};charset={$aCharset}", $aUsername, $aPassword);
-      self::setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
+    public function __construct($aHost, $aPort, $aDefaultDatabase, $aUsername, $aPassword) {
+      parent::__construct("sqlsrv:Server={$aHost},{$aPort};Database={$aDefaultDatabase}", $aUsername, $aPassword);
     }
-    
+
     /**
      * Escapes/quotes a parameter for use in a query
      * @param mixed $aParam the parameter to be quoted.
@@ -45,11 +43,7 @@
      */
     public function escape($aParam, $aParamType = DatabaseInterface::PARAM_IS_STR) {
       switch ($aParamType) {
-        
-        case self::PARAM_IS_BLOB:
-          return '0x' . bin2hex($aParam); //avoid any possible charset mess
-          break;
-    
+
         default:
           return parent::escape($aParam, $aParamType);
       }
@@ -97,7 +91,7 @@
       $result = $statement->fetchAssoc();
       $columns = array();
       foreach ($result as $row) {
-        $columns[$row['COLUMN_NAME']] = new MySQLColumnMeta($this, $aDatabase, $aTable, $row['COLUMN_NAME']);
+        $columns[$row['COLUMN_NAME']] = new MSSQLColumnMeta($this, $aDatabase, $aTable, $row['COLUMN_NAME']);
       }
       return $columns;
     }
@@ -110,12 +104,24 @@
      */
     public function getPrimaryKey($aDatabase, $aTable) {
       $columns = array();
-      $SQL = "SELECT ORDINAL_POSITION, COLUMN_NAME
-                     FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
-                     WHERE KEY_COLUMN_USAGE.CONSTRAINT_SCHEMA = :database
-                           AND KEY_COLUMN_USAGE.TABLE_NAME = :table_name
-                           AND KEY_COLUMN_USAGE.CONSTRAINT_NAME = 'PRIMARY'
-                     ORDER BY ORDINAL_POSITION";
+      $SQL = "SELECT ind.name AS INDEX_NAME,
+                     col.name AS COLUMN_NAME
+              FROM sys.indexes ind
+                   JOIN sys.index_columns ic
+                     ON ind.object_id = ic.object_id
+                        AND ind.index_id = ic.index_id
+                   JOIN sys.columns col
+                     ON ic.object_id = col.object_id
+                        AND ic.column_id = col.column_id
+                   JOIN sys.tables t
+                     ON ind.object_id = t.object_id
+                   JOIN sys.schemas s
+                     ON t.schema_id = s.schema_id
+             WHERE ind.is_primary_key = 1
+                   AND col.is_nullable = 0
+                   AND s.name = :database
+                   AND t.name = :table_name
+             ORDER BY ind.name, ic.index_column_id";
       $statement = $this->prepare($SQL);
       $statement->bindParamToValue(':database', $aDatabase);
       $statement->bindParamToValue(':table_name', $aTable);
@@ -124,6 +130,17 @@
       $result = $statement->fetchAssoc();
       foreach ($result as $column) {
         $columns[] = $column['COLUMN_NAME'];
+      }
+
+      if (!$columns) { //Try uniqueidentifier
+        $statement = $this->prepare("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE DATA_TYPE = 'uniqueidentifier' AND TABLE_SCHEMA = :database AND TABLE_NAME = :table_name");
+        $statement->bindParamToValue(':database', $aDatabase);
+        $statement->bindParamToValue(':table_name', $aTable);
+        $statement->execute();
+        $result = $statement->fetchAssoc(false);
+        if ($result) {
+          $columns[] = $result['COLUMN_NAME'];
+        }
       }
       return $columns;
     }
@@ -137,12 +154,23 @@
     public function getIndexes($aDatabase, $aTable) {
 
       $indexes = array();
-      $SQL = "SELECT INDEX_NAME, COLUMN_NAME
-                     FROM INFORMATION_SCHEMA.STATISTICS
-                     WHERE TABLE_SCHEMA = :database
-                           AND TABLE_NAME = :table_name
-                           AND INDEX_NAME != 'PRIMARY'
-                     ORDER BY INDEX_NAME ASC, SEQ_IN_INDEX ASC";
+      $SQL = "SELECT ind.name AS INDEX_NAME,
+                     col.name AS COLUMN_NAME
+              FROM sys.indexes ind
+                   JOIN sys.index_columns ic
+                     ON ind.object_id = ic.object_id
+                        AND ind.index_id = ic.index_id
+                   JOIN sys.columns col
+                     ON ic.object_id = col.object_id
+                        AND ic.column_id = col.column_id
+                   JOIN sys.tables t
+                     ON ind.object_id = t.object_id
+                   JOIN sys.schemas s
+                     ON t.schema_id = s.schema_id
+             WHERE ind.is_primary_key = 0
+                   AND s.name = :database
+                   AND t.name = :table_name
+             ORDER BY ind.name ASC, ic.index_column_id ASC";
       $statement = $this->prepare($SQL);
       $statement->bindParamToValue(':database', $aDatabase);
       $statement->bindParamToValue(':table_name', $aTable);
@@ -151,6 +179,7 @@
       $result = $statement->fetchAssoc(true, true);
 
       foreach ($result as $index => $columnList) {
+        $index = substr($index, 0, 64);
         $indexes[$index] = array();
         foreach ($columnList as $col) {
           $indexes[$index][] = $col['COLUMN_NAME'];

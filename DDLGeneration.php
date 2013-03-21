@@ -26,22 +26,22 @@
       else {
         $unsigned = false;
       }
-      
+
       if (in_array($MySQLType, array('ENUM', 'SET'))) {
         $query = sprintf("SHOW COLUMNS FROM %s.%s LIKE %s",
             $this->connection->quoteIdentifier($this->database),
             $this->connection->quoteIdentifier($this->table),
             $this->connection->escape($this->name));
-      
+
         $statement = $this->connection->query($query);
         $values = $statement->fetchAssoc(false)['Type'];
         $values = explode("','", substr($values, strpos($values, '(') + 2, -2));
         asort($values);
-      
+
         $def .= $MySQLType;
         $def .= '(' . join(', ', array_map(function($c) {return "'".addslashes($c)."'";}, $values)) . ')';
       }
-      else if (in_array($MySQLType, array('CHAR', 'VARCHAR')) && $this->getDistinctValueCount() <= 16) {
+      else if (in_array($MySQLType, array('CHAR', 'VARCHAR')) && $this->getLength() < 64 && $this->getDistinctValueCount() <= 16) {
         $query = sprintf("SELECT DISTINCT %s FROM %s.%s WHERE %s IS NOT NULL ORDER BY %s ASC",
                          $this->connection->quoteIdentifier($this->name),
                          $this->connection->quoteIdentifier($this->database),
@@ -59,7 +59,9 @@
         }
         else {
           $def .= $MySQLType;
-          $def .= '(' . $this->getLength() . ')';
+          if ($this->getLength() > 0) {
+            $def .= '(' . $this->getLength() . ')';
+          }
         }
       }
       else if (in_array($MySQLType, array('DATETIME', 'TIMESTAMP', 'TIME'))) {
@@ -69,13 +71,13 @@
       else {
         $def .= $MySQLType;
 
-        if ($this->getScale()) {
+        if ($this->getScale() && !in_array($MySQLType, array('DATE'))) {
           $def .= '(' . $this->getPrecision() . ',' . $this->getScale() . ')';
         }
-        else if ($this->getPrecision() && strpos($MySQLType, 'INT') === false) {
+        else if ($this->getPrecision() && !in_array($MySQLType, array('TINYINT', 'SMALLINT', 'MEDIUMINT', 'INT', 'BIGINT'))) {
           $def .= '(' . $this->getPrecision() . ')';
         }
-        else if ($this->getLength() && strpos($MySQLType, 'INT') === false) {
+        else if ($this->getLength() > 0 && !in_array($MySQLType, array('TINYINT', 'SMALLINT', 'MEDIUMINT', 'INT', 'BIGINT'))) {
           $def .= '(' . $this->getLength() . ')';
         }
 
