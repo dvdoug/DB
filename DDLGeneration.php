@@ -29,13 +29,14 @@
 
       if (in_array($MySQLType, array('ENUM', 'SET'))) {
         $query = sprintf("SHOW COLUMNS FROM %s.%s LIKE %s",
-            $this->connection->quoteIdentifier($this->database),
-            $this->connection->quoteIdentifier($this->table),
-            $this->connection->escape($this->name));
+                         $this->connection->quoteIdentifier($this->database),
+                         $this->connection->quoteIdentifier($this->table),
+                         $this->connection->escape($this->name));
 
         $statement = $this->connection->query($query);
         $values = $statement->fetchAssoc(false)['Type'];
         $values = explode("','", substr($values, strpos($values, '(') + 2, -2));
+        $values = array_intersect_key($values,array_unique(array_map("strtolower",$values)));
         asort($values);
 
         $def .= $MySQLType;
