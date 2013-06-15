@@ -13,10 +13,30 @@
    */
   interface DatabaseInterface {
 
+
+    /**
+     * Param is null
+     */
     const PARAM_IS_NULL = 0;
+
+    /**
+     * Param is int
+     */
     const PARAM_IS_INT = 1;
+
+    /**
+     * Param is string
+     */
     const PARAM_IS_STR = 2;
+
+    /**
+     * Param is blob
+     */
     const PARAM_IS_BLOB = 3;
+
+    /**
+     * Param is boolean
+     */
     const PARAM_IS_BOOL = 5;
 
     /**
@@ -53,7 +73,7 @@
     /**
      * Executes an SQL statement, returning the result set if any as a StatementInterface object
      * @param string $aSQL the SQL statement to execute.
-     * @return StatementInterface|true
+     * @return StatementInterface|bool
      */
     public function query($aSQL);
 
@@ -67,7 +87,7 @@
     /**
      * Escapes/quotes a parameter for use in a query
      * @param mixed $aParam the parameter to be quoted.
-     * @param $aParamaterType data type hint for drivers
+     * @param int $aParamType data type hint for drivers
      * @return string a quoted string that is theoretically safe to pass into an SQL statement
      */
     public function escape($aParam, $aParamType = self::PARAM_IS_STR);

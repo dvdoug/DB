@@ -24,7 +24,7 @@
      * Fetches the next row(s) from the result set as an associative array
      * @param bool $aAllRows true to fetch all remaining rows, false for next row only
      * @param bool $aGroupByFirstCol whether to group the results by the first column
-     * @return array|false
+     * @return array|bool
      */
     public function fetchAssoc($aAllRows = true, $aGroupByFirstCol = false) {
       if ($aAllRows) {
@@ -44,7 +44,7 @@
      * Fetches the next row(s) from a 2-column result set as a key=>value pairs
      * @param bool $aAllRows true to fetch all remaining rows, false for next row only
      * @param bool $aGroupByFirstCol whether to group the results by the first column
-     * @return array|false
+     * @return array|bool
      */
     public function fetchKeyPair($aAllRows = true, $aGroupByFirstCol = false) {
       if ($aAllRows) {
@@ -67,7 +67,7 @@
      * @param bool $aRunConstructorFirst whether the constructor should be run before/after the object's members are set
      * @param bool $aAllRows true to fetch all remaining rows, false for next row only
      * @param bool $aGroupByFirstCol whether to group the results by the first column
-     * @return array|false
+     * @return array|bool
      */
     public function fetchObj($aClassName = 'stdClass', $aConstructorArguments = array(), $aRunConstructorFirst = true, $aAllRows = true, $aGroupByFirstCol = false) {
       if ($aRunConstructorFirst) {
@@ -93,7 +93,7 @@
     /**
      * Fetches the next row into the specified object
      * @param string $aObject object to update
-     * @return array|false
+     * @return array|bool
      */
     public function fetchIntoObj($aObject) {
       $this->setFetchMode(\PDO::FETCH_INTO, $aObject);

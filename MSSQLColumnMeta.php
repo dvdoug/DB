@@ -171,6 +171,8 @@
 
     /**
      * Get column type as suitable for MySQL
+     *
+     * @throws \Exception
      * @return string
      */
     public function getMySQLType() {
@@ -302,6 +304,8 @@
 
     /**
      * Get column type as suitable for Oracle
+     *
+     * @throws \Exception
      * @return string
      */
     public function getOracleType() {
@@ -415,7 +419,7 @@
           break;
 
       default:
-          return;
+          return 0;
       }
     }
 
@@ -456,7 +460,7 @@
      * @return string
      */
     public function getMinValue() {
-      return $this->minValue ?: PHP_INT_MIN;
+      return $this->minValue ?: ~PHP_INT_MAX;
     }
 
     /**

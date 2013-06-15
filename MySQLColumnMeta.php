@@ -180,6 +180,8 @@
 
     /**
      * Get column type as suitable for Oracle
+     *
+     * @throws \Exception
      * @return string
      */
     public function getOracleType() {
@@ -281,7 +283,7 @@
         case 'VARCHAR':
           return $this->length;
         default:
-          return;
+          return 0;
       }
     }
 

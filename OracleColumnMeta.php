@@ -180,6 +180,8 @@
 
     /**
      * Get column type as suitable for MySQL
+     *
+     * @throws \Exception
      * @return string
      */
     public function getMySQLType() {
@@ -328,7 +330,7 @@
           return $this->length;
           break;
         default:
-          return;
+          return 0;
       }
     }
 

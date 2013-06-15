@@ -39,7 +39,7 @@
     /**
      * Executes an SQL statement, returning the result set if any as a StatementInterface object
      * @param string $aSQL the SQL statement to execute.
-     * @return StatementInterface|true
+     * @return StatementInterface|bool
      */
     public function query($aSQL) {
       return parent::query($aSQL);
@@ -56,8 +56,11 @@
 
     /**
      * Escapes/quotes a parameter for use in a query
-     * @param mixed $aParam the parameter to be quoted.
-     * @param $aParamaterType data type hint for drivers
+     *
+     * @param mixed $aParam     the parameter to be quoted.
+     * @param int   $aParamType data type hint for drivers
+     *
+     * @throws \RuntimeException
      * @return string a quoted string that is theoretically safe to pass into an SQL statement
      */
     public function escape($aParam, $aParamType = DatabaseInterface::PARAM_IS_STR) {
@@ -102,8 +105,6 @@
       $colDefs = array();
 
       foreach ($columns as $columnName => $column) {
-        $column instanceof ColumnMetaInterface;
-
         if ($aSkipUnusedCols && $column->getDistinctValueCount() <= 1) {
           unset($columns[$columnName]);
           continue;
@@ -175,8 +176,6 @@
       $colDefs = array();
 
       foreach ($columns as $columnName => $column) {
-        $column instanceof ColumnMetaInterface;
-
         if ($aSkipUnusedCols && $column->getDistinctValueCount() <= 1) {
           unset($columns[$columnName]);
           continue;

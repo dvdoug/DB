@@ -36,11 +36,11 @@
       parent::__construct("mysql:host={$aHost};port={$aPort};dbname={$aDefaultDatabase};charset={$aCharset}", $aUsername, $aPassword);
       self::setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
     }
-    
+
     /**
      * Escapes/quotes a parameter for use in a query
      * @param mixed $aParam the parameter to be quoted.
-     * @param $aParamaterType data type hint for drivers
+     * @param int $aParamType data type hint for drivers
      * @return string a quoted string that is theoretically safe to pass into an SQL statement
      */
     public function escape($aParam, $aParamType = DatabaseInterface::PARAM_IS_STR) {
