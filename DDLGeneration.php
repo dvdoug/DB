@@ -53,6 +53,8 @@
         foreach ($this->connection->query($query) as $value) {
           $values[] = trim($value[$this->name]);
         }
+        $values = array_intersect_key($values,array_unique(array_map("strtolower",$values)));
+        asort($values);
 
         if ($values) {
           $def .= 'ENUM';
