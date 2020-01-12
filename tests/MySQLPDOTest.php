@@ -4,25 +4,6 @@
   
   use PHPUnit\Framework\TestCase;
 
-  function autoload($className) {
-    $className = ltrim($className, '\\');
-    $namespace = '';
-    if ($lastNsPos = strrpos($className, '\\')) {
-      $namespace = substr($className, 0, $lastNsPos);
-      $className = substr($className, $lastNsPos + 1);
-    }
-    if ($namespace == 'DVDoug\\DB') {
-      $fileName = __DIR__ . '/../' . $className . '.php';
-      require $fileName;
-      return true;
-    }
-    else {
-      return false;
-    }
-  }
-  
-  spl_autoload_register('\\DVDoug\\DB\\autoload');
-
   class MySQLPDOTest extends TestCase {
     
     /**
