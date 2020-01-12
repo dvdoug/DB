@@ -10,7 +10,7 @@
         "dvdoug/stringstream": "1.0.*"
     },
     "require-dev": {
-        "phpunit/PHPUnit": ">=3.7"
+        "phpunit/phpunit": ">=3.7"
     },
     "autoload": {
         "psr-0": {
