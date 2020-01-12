@@ -7,7 +7,7 @@ implementations are allowed for in case where drivers don't exist or are simply 
 
 Requirements
 ------------
-* PHP 5.3 or higher
+* PHP 5.4 or higher
 * For schema conversions, minimum MySQL version is 5.6 
 
 License
