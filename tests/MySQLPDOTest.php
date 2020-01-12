@@ -34,7 +34,7 @@
         $this->markTestSkipped();
       }
       
-      static::$conn = new MySQLPDODatabase('localhost', 3306, 'test', 'test', 'test');
+      static::$conn = new MySQLPDODatabase('localhost', 3306, 'test', 'travis', '');
       self::assertTrue(self::$conn instanceof DatabaseInterface);
     }
     
@@ -92,6 +92,10 @@
       
       $actual = self::$conn->getTables();
       unset($actual['information_schema']); //too variable
+      unset($actual['performance_schema']); //too variable
+      unset($actual['mysql']); //too variable
+      unset($actual['sys']); //too variable
+      unset($actual['travis']); //too variable
 
       self::assertEquals($expected, $actual);
     }
