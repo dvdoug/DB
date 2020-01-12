@@ -22,6 +22,8 @@ matrix:
     - php: 5.4
       env: PREFER_LOWEST=1
       dist: trusty
+    - php: 7.4
+      env: CSFIXER=1
   allow_failures:
     - php: nightly
 

@@ -1,150 +1,148 @@
 <?php
 /**
- * Database Access Layer
- * @package DB
+ * Database Access Layer.
  * @author Doug Wright
  */
-  namespace DVDoug\DB;
+
+namespace DVDoug\DB;
 
   /**
-   * Represents a connection to a database server
+   * Represents a connection to a database server.
    * @author Doug Wright
-   * @package DB
    */
-  interface DatabaseInterface {
+  interface DatabaseInterface
+  {
+      /**
+       * Param is null.
+       */
+      const PARAM_IS_NULL = 0;
 
+      /**
+       * Param is int.
+       */
+      const PARAM_IS_INT = 1;
 
-    /**
-     * Param is null
-     */
-    const PARAM_IS_NULL = 0;
+      /**
+       * Param is string.
+       */
+      const PARAM_IS_STR = 2;
 
-    /**
-     * Param is int
-     */
-    const PARAM_IS_INT = 1;
+      /**
+       * Param is blob.
+       */
+      const PARAM_IS_BLOB = 3;
 
-    /**
-     * Param is string
-     */
-    const PARAM_IS_STR = 2;
+      /**
+       * Param is boolean.
+       */
+      const PARAM_IS_BOOL = 5;
 
-    /**
-     * Param is blob
-     */
-    const PARAM_IS_BLOB = 3;
+      /**
+       * Prepares a SQL statement for execution and returns a statement object.
+       * @param  string             $aSQL
+       * @return StatementInterface
+       */
+      public function prepare($aSQL);
 
-    /**
-     * Param is boolean
-     */
-    const PARAM_IS_BOOL = 5;
+      /**
+       * Initiates a transaction.
+       * @return bool
+       */
+      public function beginTransaction();
 
-    /**
-     * Prepares a SQL statement for execution and returns a statement object
-     * @param string $aSQL
-     * @return StatementInterface
-     */
-    public function prepare($aSQL);
+      /**
+       * Commits a transaction.
+       * @return bool
+       */
+      public function commit();
 
-    /**
-     * Initiates a transaction
-     * @return bool
-     */
-    public function beginTransaction();
+      /**
+       * Rolls back a transaction.
+       * @return bool
+       */
+      public function rollBack();
 
-    /**
-     * Commits a transaction
-     * @return bool
-     */
-    public function commit();
+      /**
+       * Checks if inside a transaction.
+       * @return bool
+       */
+      public function inTransaction();
 
-    /**
-     * Rolls back a transaction
-     * @return bool
-     */
-    public function rollBack();
+      /**
+       * Executes an SQL statement, returning the result set if any as a StatementInterface object.
+       * @param  string                  $aSQL the SQL statement to execute
+       * @return StatementInterface|bool
+       */
+      public function query($aSQL);
 
-    /**
-     * Checks if inside a transaction
-     * @return bool
-     */
-    public function inTransaction();
+      /**
+       * Returns the ID of the last inserted row or sequence value.
+       * @param  string $aName name of the sequence object (if any) from which the ID should be returned
+       * @return string
+       */
+      public function getLastInsertId($aName = null);
 
-    /**
-     * Executes an SQL statement, returning the result set if any as a StatementInterface object
-     * @param string $aSQL the SQL statement to execute.
-     * @return StatementInterface|bool
-     */
-    public function query($aSQL);
+      /**
+       * Escapes/quotes a parameter for use in a query.
+       * @param  mixed  $aParam     the parameter to be quoted
+       * @param  int    $aParamType data type hint for drivers
+       * @return string a quoted string that is theoretically safe to pass into an SQL statement
+       */
+      public function escape($aParam, $aParamType = self::PARAM_IS_STR);
 
-    /**
-     * Returns the ID of the last inserted row or sequence value
-     * @param string $aName name of the sequence object (if any) from which the ID should be returned
-     * @return string
-     */
-    public function getLastInsertId($aName = NULL);
+      /**
+       * Adds appropriate quotes to an identifier so it can be safely used in an SQL statement.
+       * @param  mixed  $aIdentifier the parameter to be quoted
+       * @return string
+       */
+      public function quoteIdentifier($aIdentifier);
 
-    /**
-     * Escapes/quotes a parameter for use in a query
-     * @param mixed $aParam the parameter to be quoted.
-     * @param int $aParamType data type hint for drivers
-     * @return string a quoted string that is theoretically safe to pass into an SQL statement
-     */
-    public function escape($aParam, $aParamType = self::PARAM_IS_STR);
+      /**
+       * List of tables in a database.
+       * @param  string $aDatabase database/schema name
+       * @return array
+       */
+      public function getTables($aDatabase = null);
 
-    /**
-     * Adds appropriate quotes to an identifier so it can be safely used in an SQL statement
-     * @param mixed $aIdentifier the parameter to be quoted.
-     * @return string
-     */
-    public function quoteIdentifier($aIdentifier);
+      /**
+       * List of columns (and types) in a table.
+       * @param  string                $aDatabase database/schema name
+       * @param  string                $aTable    table name
+       * @return ColumnMetaInterface[]
+       */
+      public function getTableColumns($aDatabase, $aTable);
 
-    /**
-     * List of tables in a database
-     * @param string $aDatabase database/schema name
-     * @return array
-     */
-    public function getTables($aDatabase = NULL);
+      /**
+       * Primary key column(s).
+       * @param  string $aDatabase database/schema name
+       * @param  string $aTable    table name
+       * @return array
+       */
+      public function getPrimaryKey($aDatabase, $aTable);
 
-    /**
-     * List of columns (and types) in a table
-     * @param string $aDatabase database/schema name
-     * @param string $aTable table name
-     * @return ColumnMetaInterface[]
-     */
-    public function getTableColumns($aDatabase, $aTable);
+      /**
+       * Non-PK indexes.
+       * @param  string $aDatabase database/schema name
+       * @param  string $aTable    table name
+       * @return array
+       */
+      public function getIndexes($aDatabase, $aTable);
 
-    /**
-     * Primary key column(s)
-     * @param string $aDatabase database/schema name
-     * @param string $aTable table name
-     * @return array
-     */
-    public function getPrimaryKey($aDatabase, $aTable);
+      /**
+       * Get MySQL table definition.
+       * @param  string $aDatabase       database/schema name
+       * @param  string $aTable          table name
+       * @param  bool   $aSkipUnusedCols whether to skip unused columns
+       * @return string
+       */
+      public function getMySQLTableDef($aDatabase, $aTable, $aSkipUnusedCols = true);
 
-    /**
-     * Non-PK indexes
-     * @param string $aDatabase database/schema name
-     * @param string $aTable table name
-     * @return array
-     */
-    public function getIndexes($aDatabase, $aTable);
-
-    /**
-     * Get MySQL table definition
-     * @param string $aDatabase database/schema name
-     * @param string $aTable table name
-     * @param bool $aSkipUnusedCols whether to skip unused columns
-     * @return string
-     */
-    public function getMySQLTableDef($aDatabase, $aTable, $aSkipUnusedCols = true);
-
-    /**
-     * Get Oracle table definition
-     * @param string $aDatabase database/schema name
-     * @param string $aTable table name
-     * @param bool $aSkipUnusedCols whether to skip unused columns
-     * @return string
-     */
-    public function getOracleTableDef($aDatabase, $aTable, $aSkipUnusedCols = true);
+      /**
+       * Get Oracle table definition.
+       * @param  string $aDatabase       database/schema name
+       * @param  string $aTable          table name
+       * @param  bool   $aSkipUnusedCols whether to skip unused columns
+       * @return string
+       */
+      public function getOracleTableDef($aDatabase, $aTable, $aSkipUnusedCols = true);
   }

@@ -1,109 +1,109 @@
 <?php
 /**
- * Database Access Layer
- * @package DB
+ * Database Access Layer.
  * @author Doug Wright
  */
-  namespace DVDoug\DB;
+
+namespace DVDoug\DB;
 
   /**
-   * Metadata about a database column
+   * Metadata about a database column.
    * @author Doug Wright
-   * @package DB
    */
-  class MySQLColumnMeta implements ColumnMetaInterface {
-    use DDLGeneration;
+  class MySQLColumnMeta implements ColumnMetaInterface
+  {
+      use DDLGeneration;
 
-    /**
-     * Database connection
-     * @var DatabaseInterface
-     */
-    protected $connection;
-
-    /**
-     * Database name
-     * @var string
-     */
-    protected $database;
-
-    /**
-     * Table name
-     * @var string
-     */
-    protected $table;
-
-    /**
-     * Column name
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * Column type
-     * @var string
-     */
-    protected $type;
-
-    /**
-     * Column length
-     * @var int
-     */
-    protected $length;
-
-    /**
-     * Column precision
-     * @var int|null
-     */
-    protected $precision;
-
-    /**
-     * Column scale
-     * @var int|null
-     */
-    protected $scale;
-
-    /**
-     * Column nullable?
-     * @var boolean
-     */
-    protected $isNullable;
-
-    /**
-     * Column max value
-     * @var string
-     */
-    protected $maxValue;
-
-    /**
-     * Column min value
-     * @var string
-     */
-    protected $minValue;
-
-    /**
-     * Number of distinct values
-     * @var int
-     */
-    protected $distinctValues;
-
-    /**
-     * Constructor
-     * @param DatabaseInterface $aConnection connection to database
-     * @param string $aDatabase database/schema name
-     * @param string $aTable table name
-     * @param string $aColumnName column name
-     */
-    public function __construct(DatabaseInterface $aConnection, $aDatabase, $aTable, $aColumnName) {
-
-      $this->connection = $aConnection;
-      $this->database = $aDatabase;
-      $this->table = $aTable;
-      $this->name = $aColumnName;
-
-      /*
-       * Basic metadata from the schema
+      /**
+       * Database connection.
+       * @var DatabaseInterface
        */
-      $statement = $this->connection->prepare("SELECT TABLE_SCHEMA,
+      protected $connection;
+
+      /**
+       * Database name.
+       * @var string
+       */
+      protected $database;
+
+      /**
+       * Table name.
+       * @var string
+       */
+      protected $table;
+
+      /**
+       * Column name.
+       * @var string
+       */
+      protected $name;
+
+      /**
+       * Column type.
+       * @var string
+       */
+      protected $type;
+
+      /**
+       * Column length.
+       * @var int
+       */
+      protected $length;
+
+      /**
+       * Column precision.
+       * @var int|null
+       */
+      protected $precision;
+
+      /**
+       * Column scale.
+       * @var int|null
+       */
+      protected $scale;
+
+      /**
+       * Column nullable?
+       * @var bool
+       */
+      protected $isNullable;
+
+      /**
+       * Column max value.
+       * @var string
+       */
+      protected $maxValue;
+
+      /**
+       * Column min value.
+       * @var string
+       */
+      protected $minValue;
+
+      /**
+       * Number of distinct values.
+       * @var int
+       */
+      protected $distinctValues;
+
+      /**
+       * Constructor.
+       * @param DatabaseInterface $aConnection connection to database
+       * @param string            $aDatabase   database/schema name
+       * @param string            $aTable      table name
+       * @param string            $aColumnName column name
+       */
+      public function __construct(DatabaseInterface $aConnection, $aDatabase, $aTable, $aColumnName)
+      {
+          $this->connection = $aConnection;
+          $this->database = $aDatabase;
+          $this->table = $aTable;
+          $this->name = $aColumnName;
+
+          /*
+           * Basic metadata from the schema
+           */
+          $statement = $this->connection->prepare('SELECT TABLE_SCHEMA,
                                                       TABLE_NAME,
                                                       COLUMN_NAME, 
                                                       DATA_TYPE,
@@ -115,77 +115,81 @@
                                                FROM INFORMATION_SCHEMA.COLUMNS
                                                WHERE TABLE_SCHEMA = :database
                                                      AND TABLE_NAME = :table_name
-                                                     AND COLUMN_NAME = :column_name");
-      $statement->bindParamToValue(':database', $this->database);
-      $statement->bindParamToValue(':table_name', $this->table);
-      $statement->bindParamToValue(':column_name', $this->name);
-      $statement->execute();
+                                                     AND COLUMN_NAME = :column_name');
+          $statement->bindParamToValue(':database', $this->database);
+          $statement->bindParamToValue(':table_name', $this->table);
+          $statement->bindParamToValue(':column_name', $this->name);
+          $statement->execute();
 
-      $meta = $statement->fetchAssoc(false);
+          $meta = $statement->fetchAssoc(false);
 
-      $this->type = strtoupper($meta['DATA_TYPE']);
-      $this->length = $meta['CHARACTER_MAXIMUM_LENGTH'] ?: $meta['NUMERIC_PRECISION'];
-      $this->precision = $meta['NUMERIC_PRECISION'];
-      $this->scale = $meta['SCALE'];
-      $this->isNullable = ($meta['IS_NULLABLE'] == 'YES');
+          $this->type = strtoupper($meta['DATA_TYPE']);
+          $this->length = $meta['CHARACTER_MAXIMUM_LENGTH'] ?: $meta['NUMERIC_PRECISION'];
+          $this->precision = $meta['NUMERIC_PRECISION'];
+          $this->scale = $meta['SCALE'];
+          $this->isNullable = ($meta['IS_NULLABLE'] == 'YES');
 
-      if (strpos($meta['COLUMN_TYPE'], 'unsigned') !== false) {
-        $this->type .= ' UNSIGNED';
+          if (strpos($meta['COLUMN_TYPE'], 'unsigned') !== false) {
+              $this->type .= ' UNSIGNED';
+          }
+
+          /*
+           * Metadata from the data stored
+           */
+          $query = sprintf('SELECT COUNT(*) AS COUNT FROM (SELECT %s FROM %s.%s GROUP BY %s) distinctvalues',
+                       $this->connection->quoteIdentifier($this->name),
+                       $this->connection->quoteIdentifier($this->database),
+                       $this->connection->quoteIdentifier($this->table),
+                       $this->connection->quoteIdentifier($this->name));
+          $this->distinctValues = $this->connection->query($query)->fetchAssoc(false)['COUNT'];
+
+          $query = sprintf('SELECT MIN(%s) AS ROWMIN, MAX(%s) AS ROWMAX FROM %s.%s WHERE %s IS NOT NULL',
+                       $this->connection->quoteIdentifier($this->name),
+                       $this->connection->quoteIdentifier($this->name),
+                       $this->connection->quoteIdentifier($this->database),
+                       $this->connection->quoteIdentifier($this->table),
+                       $this->connection->quoteIdentifier($this->name));
+          $data = $this->connection->query($query)->fetchAssoc(false);
+          $this->maxValue = $data['ROWMAX'];
+          $this->minValue = $data['ROWMIN'];
       }
 
-      /*
-       * Metadata from the data stored
+      /**
+       * Get column name.
+       * @return string
        */
-      $query = sprintf("SELECT COUNT(*) AS COUNT FROM (SELECT %s FROM %s.%s GROUP BY %s) distinctvalues",
-                       $this->connection->quoteIdentifier($this->name),
-                       $this->connection->quoteIdentifier($this->database),
-                       $this->connection->quoteIdentifier($this->table),
-                       $this->connection->quoteIdentifier($this->name));
-      $this->distinctValues = $this->connection->query($query)->fetchAssoc(false)['COUNT'];
+      public function getName()
+      {
+          return $this->name;
+      }
 
-      $query = sprintf("SELECT MIN(%s) AS ROWMIN, MAX(%s) AS ROWMAX FROM %s.%s WHERE %s IS NOT NULL",
-                       $this->connection->quoteIdentifier($this->name),
-                       $this->connection->quoteIdentifier($this->name),
-                       $this->connection->quoteIdentifier($this->database),
-                       $this->connection->quoteIdentifier($this->table),
-                       $this->connection->quoteIdentifier($this->name));
-      $data = $this->connection->query($query)->fetchAssoc(false);
-      $this->maxValue = $data['ROWMAX'];
-      $this->minValue = $data['ROWMIN'];
-    }
+      /**
+       * Get column type as used by originating database.
+       * @return string
+       */
+      public function getOriginalType()
+      {
+          return $this->type;
+      }
 
-    /**
-     * Get column name
-     * @return string
-     */
-    public function getName() {
-      return $this->name;
-    }
+      /**
+       * Get column type as suitable for MySQL.
+       * @return string
+       */
+      public function getMySQLType()
+      {
+          return $this->type;
+      }
 
-    /**
-     * Get column type as used by originating database
-     * @return string
-     */
-    public function getOriginalType() {
-      return $this->type;
-    }
-
-    /**
-     * Get column type as suitable for MySQL
-     * @return string
-     */
-    public function getMySQLType() {
-      return $this->type;
-    }
-
-    /**
-     * Get column type as suitable for Oracle
-     *
-     * @throws \Exception
-     * @return string
-     */
-    public function getOracleType() {
-      switch ($this->type) {
+      /**
+       * Get column type as suitable for Oracle.
+       *
+       * @throws \Exception
+       * @return string
+       */
+      public function getOracleType()
+      {
+          switch ($this->type) {
         case 'BIT':
         case 'TINYINT':
         case 'TINYINT UNSIGNED':
@@ -212,12 +216,12 @@
         case 'DATE':
         case 'DATETIME':
           if ($this->precision) {
-            return 'TIMESTAMP';
-          }
-          else {
-            return 'DATE';
+              return 'TIMESTAMP';
+          } else {
+              return 'DATE';
           }
 
+          // no break
         case 'TIMESTAMP':
           return 'TIMESTAMP';
 
@@ -247,19 +251,18 @@
         case 'LONGTEXT':
           return 'NCLOB';
 
-
         default:
           throw new \Exception("Unknown conversion for column type {$this->type}");
-
       }
-    }
+      }
 
-    /**
-     * Get length of column
-     * @return int
-     */
-    public function getLength() {
-      switch($this->getOriginalType()) {
+      /**
+       * Get length of column.
+       * @return int
+       */
+      public function getLength()
+      {
+          switch ($this->getOriginalType()) {
         case 'BIT':
         case 'TINYINT':
         case 'TINYINT UNSIGNED':
@@ -285,53 +288,59 @@
         default:
           return 0;
       }
-    }
+      }
 
-    /**
-     * Get column precision (number of digits)
-     * @return int|null int for numeric columns, null for non-numeric
-     */
-    public function getPrecision() {
-      return $this->precision;
-    }
+      /**
+       * Get column precision (number of digits).
+       * @return int|null int for numeric columns, null for non-numeric
+       */
+      public function getPrecision()
+      {
+          return $this->precision;
+      }
 
-    /**
-     * Get column scale (number of digits after decimal place)
-     * @return int|null int for numeric columns, null for non-numeric
-     */
-    public function getScale() {
-      return $this->scale;
-    }
+      /**
+       * Get column scale (number of digits after decimal place).
+       * @return int|null int for numeric columns, null for non-numeric
+       */
+      public function getScale()
+      {
+          return $this->scale;
+      }
 
-    /**
-     * Get column name
-     * @return string
-     */
-    public function isNullable() {
-      return $this->isNullable;
-    }
+      /**
+       * Get column name.
+       * @return string
+       */
+      public function isNullable()
+      {
+          return $this->isNullable;
+      }
 
-    /**
-     * Get column name
-     * @return string
-     */
-    public function getMaxValue() {
-      return $this->maxValue;
-    }
+      /**
+       * Get column name.
+       * @return string
+       */
+      public function getMaxValue()
+      {
+          return $this->maxValue;
+      }
 
-    /**
-     * Get column name
-     * @return string
-     */
-    public function getMinValue() {
-      return $this->minValue;
-    }
+      /**
+       * Get column name.
+       * @return string
+       */
+      public function getMinValue()
+      {
+          return $this->minValue;
+      }
 
-    /**
-     * The number of distinct values in this column
-     * @return int
-     */
-    public function getDistinctValueCount() {
-      return $this->distinctValues;
-    }
+      /**
+       * The number of distinct values in this column.
+       * @return int
+       */
+      public function getDistinctValueCount()
+      {
+          return $this->distinctValues;
+      }
   }
