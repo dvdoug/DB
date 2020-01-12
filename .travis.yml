@@ -19,9 +19,9 @@ matrix:
       dist: trusty
     - php: 5.4
       dist: trusty
-    - php: 5.3
+    - php: 5.4
       env: PREFER_LOWEST=1
-      dist: precise
+      dist: trusty
   allow_failures:
     - php: nightly
 
