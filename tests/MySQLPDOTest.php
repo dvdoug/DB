@@ -2,6 +2,8 @@
 
   namespace DVDoug\DB;
   
+  use PHPUnit\Framework\TestCase;
+
   function autoload($className) {
     $className = ltrim($className, '\\');
     $namespace = '';
@@ -21,7 +23,7 @@
   
   spl_autoload_register('\\DVDoug\\DB\\autoload');
 
-  class MySQLPDOTest extends \PHPUnit_Framework_TestCase {
+  class MySQLPDOTest extends TestCase {
     
     /**
      * @var DatabaseInterface 
