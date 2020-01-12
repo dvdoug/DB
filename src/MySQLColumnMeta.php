@@ -164,15 +164,6 @@ namespace DVDoug\DB;
       }
 
       /**
-       * Get column type as used by originating database.
-       * @return string
-       */
-      public function getOriginalType()
-      {
-          return $this->type;
-      }
-
-      /**
        * Get column type as suitable for MySQL.
        * @return string
        */
@@ -288,6 +279,15 @@ namespace DVDoug\DB;
         default:
           return 0;
       }
+      }
+
+      /**
+       * Get column type as used by originating database.
+       * @return string
+       */
+      public function getOriginalType()
+      {
+          return $this->type;
       }
 
       /**

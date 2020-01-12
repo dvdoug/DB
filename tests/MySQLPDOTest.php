@@ -2,102 +2,102 @@
 
 namespace DVDoug\DB\Test;
 
-  use DVDoug\DB\DatabaseInterface;
-  use DVDoug\DB\MySQLPDODatabase;
-  use PHPUnit\Framework\TestCase;
+use DVDoug\DB\DatabaseInterface;
+use DVDoug\DB\MySQLPDODatabase;
+use PHPUnit\Framework\TestCase;
 
-  class MySQLPDOTest extends TestCase
-  {
-      /**
-       * @var DatabaseInterface
-       */
-      public static $conn;
+class MySQLPDOTest extends TestCase
+{
+    /**
+     * @var DatabaseInterface
+     */
+    public static $conn;
 
-      public function testConnect()
-      {
-          if (!extension_loaded('pdo_mysql')) {
-              $this->markTestSkipped();
-          }
+    public function testConnect()
+    {
+        if (!extension_loaded('pdo_mysql')) {
+            $this->markTestSkipped();
+        }
 
-          static::$conn = new MySQLPDODatabase('localhost', 3306, 'test', 'travis', '');
-          self::assertTrue(self::$conn instanceof DatabaseInterface);
-      }
+        static::$conn = new MySQLPDODatabase('localhost', 3306, 'test', 'travis', '');
+        self::assertTrue(self::$conn instanceof DatabaseInterface);
+    }
 
-      /**
-       * @depends testConnect
-       */
-      public function testQuoteIdentifier()
-      {
-          $this->setUpDB();
+    /**
+     * @depends testConnect
+     */
+    public function testQuoteIdentifier()
+    {
+        $this->setUpDB();
 
-          self::assertEquals('`quoted`', self::$conn->quoteIdentifier('quoted'));
-      }
+        self::assertEquals('`quoted`', self::$conn->quoteIdentifier('quoted'));
+    }
 
-      /**
-       * @depends testConnect
-       */
-      public function testEscape()
-      {
-          $this->setUpDB();
+    /**
+     * @depends testConnect
+     */
+    public function testEscape()
+    {
+        $this->setUpDB();
 
-          self::assertEquals("'quoted'", self::$conn->escape('quoted'));
-          self::assertEquals("'quoted'", self::$conn->escape('quoted', DatabaseInterface::PARAM_IS_STR));
-          self::assertEquals("'quo\'ted'", self::$conn->escape('quo\'ted'));
-          self::assertEquals("'quo\\\\ted'", self::$conn->escape('quo\\ted'));
-          self::assertEquals('12345', self::$conn->escape('12345', DatabaseInterface::PARAM_IS_INT));
-          self::assertEquals('0x' . bin2hex('escaped'), self::$conn->escape('escaped', DatabaseInterface::PARAM_IS_BLOB));
-      }
+        self::assertEquals("'quoted'", self::$conn->escape('quoted'));
+        self::assertEquals("'quoted'", self::$conn->escape('quoted', DatabaseInterface::PARAM_IS_STR));
+        self::assertEquals("'quo\'ted'", self::$conn->escape('quo\'ted'));
+        self::assertEquals("'quo\\\\ted'", self::$conn->escape('quo\\ted'));
+        self::assertEquals('12345', self::$conn->escape('12345', DatabaseInterface::PARAM_IS_INT));
+        self::assertEquals('0x' . bin2hex('escaped'), self::$conn->escape('escaped', DatabaseInterface::PARAM_IS_BLOB));
+    }
 
-      /**
-       * @depends testConnect
-       * @expectedException \RuntimeException
-       */
-      public function testInvalidEscape()
-      {
-          $this->setUpDB();
-          self::$conn->escape('string', DatabaseInterface::PARAM_IS_INT);
-      }
+    /**
+     * @depends testConnect
+     * @expectedException \RuntimeException
+     */
+    public function testInvalidEscape()
+    {
+        $this->setUpDB();
+        self::$conn->escape('string', DatabaseInterface::PARAM_IS_INT);
+    }
 
-      /**
-       * @depends testConnect
-       */
-      public function testGetTablesForOneDB()
-      {
-          $this->setUpDB();
+    /**
+     * @depends testConnect
+     */
+    public function testGetTablesForOneDB()
+    {
+        $this->setUpDB();
 
-          $expected = ['test_integers', 'test_strings'];
-          $actual = self::$conn->getTables('test');
+        $expected = ['test_integers', 'test_strings'];
+        $actual = self::$conn->getTables('test');
 
-          self::assertEquals($expected, $actual);
-      }
+        self::assertEquals($expected, $actual);
+    }
 
-      /**
-       * @depends testConnect
-       */
-      public function testGetTablesForAllDBs()
-      {
-          $this->setUpDB();
+    /**
+     * @depends testConnect
+     */
+    public function testGetTablesForAllDBs()
+    {
+        $this->setUpDB();
 
-          $expected = ['test' => ['test_integers', 'test_strings']];
+        $expected = ['test' => ['test_integers', 'test_strings']];
 
-          $actual = self::$conn->getTables();
-          unset($actual['information_schema']); //too variable
-      unset($actual['performance_schema']); //too variable
-      unset($actual['mysql']); //too variable
-      unset($actual['sys']); //too variable
-      unset($actual['travis']); //too variable
+        $actual = self::$conn->getTables();
+        unset($actual['information_schema']); //too variable
+        unset($actual['performance_schema']); //too variable
+        unset($actual['mysql']); //too variable
+        unset($actual['sys']); //too variable
+        unset($actual['travis']); //too variable
 
-      self::assertEquals($expected, $actual);
-      }
+        self::assertEquals($expected, $actual);
+    }
 
-      /**
-       * @depends testConnect
-       */
-      public function testIntegerMySQLSchemaAllCols()
-      {
-          $this->setUpDB();
+    /**
+     * @depends testConnect
+     */
+    public function testIntegerMySQLSchemaAllCols()
+    {
+        $this->setUpDB();
 
-          $expected = <<<ENDSCHEMA
+        $expected = <<<ENDSCHEMA
 CREATE TABLE `test_integers` (
 `tinyint` TINYINT NOT NULL,
 `smallint` SMALLINT NOT NULL,
@@ -115,19 +115,19 @@ CREATE TABLE `test_integers` (
 `int_default_12345` INT NOT NULL) ENGINE=InnoDB ROW_FORMAT=COMPRESSED
 ENDSCHEMA;
 
-          $actual = self::$conn->getMySQLTableDef('test', 'test_integers', false);
+        $actual = self::$conn->getMySQLTableDef('test', 'test_integers', false);
 
-          self::assertEquals($expected, $actual);
-      }
+        self::assertEquals($expected, $actual);
+    }
 
-      /**
-       * @depends testConnect
-       */
-      public function testIntegerOracleSchemaAllCols()
-      {
-          $this->setUpDB();
+    /**
+     * @depends testConnect
+     */
+    public function testIntegerOracleSchemaAllCols()
+    {
+        $this->setUpDB();
 
-          $expected = <<<ENDSCHEMA
+        $expected = <<<ENDSCHEMA
 CREATE TABLE `test_integers` (
 `tinyint` NUMBER(3) NOT NULL,
 `smallint` NUMBER(5) NOT NULL,
@@ -145,19 +145,19 @@ CREATE TABLE `test_integers` (
 `int_default_12345` NUMBER(10) NOT NULL)
 ENDSCHEMA;
 
-          $actual = self::$conn->getOracleTableDef('test', 'test_integers', false);
+        $actual = self::$conn->getOracleTableDef('test', 'test_integers', false);
 
-          self::assertEquals($expected, $actual);
-      }
+        self::assertEquals($expected, $actual);
+    }
 
-      /**
-       * @depends testConnect
-       */
-      public function testStringMySQLSchemaAllCols()
-      {
-          $this->setUpDB();
+    /**
+     * @depends testConnect
+     */
+    public function testStringMySQLSchemaAllCols()
+    {
+        $this->setUpDB();
 
-          $expected = <<<ENDSCHEMA
+        $expected = <<<ENDSCHEMA
 CREATE TABLE `test_strings` (
 `varchar` VARCHAR(12) NOT NULL,
 `char` ENUM('foo1', 'foo10', 'foo2', 'foo3', 'foo4', 'foo5', 'foo6', 'foo7', 'foo8', 'foo9') NOT NULL,
@@ -169,19 +169,19 @@ CREATE TABLE `test_strings` (
 `set_null` SET('tuv', 'wxyz') NULL) ENGINE=InnoDB ROW_FORMAT=COMPRESSED
 ENDSCHEMA;
 
-          $actual = self::$conn->getMySQLTableDef('test', 'test_strings', false);
+        $actual = self::$conn->getMySQLTableDef('test', 'test_strings', false);
 
-          self::assertEquals($expected, $actual);
-      }
+        self::assertEquals($expected, $actual);
+    }
 
-      /**
-       * @depends testConnect
-       */
-      public function testStringOracleSchemaAllCols()
-      {
-          $this->setUpDB();
+    /**
+     * @depends testConnect
+     */
+    public function testStringOracleSchemaAllCols()
+    {
+        $this->setUpDB();
 
-          $expected = <<<ENDSCHEMA
+        $expected = <<<ENDSCHEMA
 CREATE TABLE `test_strings` (
 `varchar` NVARCHAR(12) NOT NULL,
 `char` CHAR(34) NOT NULL,
@@ -193,17 +193,17 @@ CREATE TABLE `test_strings` (
 `set_null` NVARCHAR NULL)
 ENDSCHEMA;
 
-          $actual = self::$conn->getOracleTableDef('test', 'test_strings', false);
+        $actual = self::$conn->getOracleTableDef('test', 'test_strings', false);
 
-          self::assertEquals($expected, $actual);
-      }
+        self::assertEquals($expected, $actual);
+    }
 
-      private function setUpDB()
-      {
-          $SQL = file_get_contents(__DIR__ . '/MySQL.sql');
-          $statements = explode(";\r\n", $SQL);
-          foreach ($statements as $statement) {
-              static::$conn->exec($statement);
-          }
-      }
-  }
+    private function setUpDB()
+    {
+        $SQL = file_get_contents(__DIR__ . '/MySQL.sql');
+        $statements = explode(";\r\n", $SQL);
+        foreach ($statements as $statement) {
+            static::$conn->exec($statement);
+        }
+    }
+}
