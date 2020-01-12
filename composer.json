@@ -10,10 +10,17 @@
     "require-dev": {
         "phpunit/phpunit": "^4.8.35||^5.0||^6.0||^7.0||^8.0"
     },
-    "autoload": {
-        "psr-0": {
-            "DVDoug\\DB": ""
-        }
+    "config": {
+        "preferred-install": {
+            "*": "dist"
+        },
+        "sort-packages": true,
+        "optimize-autoloader": true
     },
-    "target-dir": "DVDoug/DB"
+    "autoload": {
+        "psr-4": {
+            "DVDoug\\DB\\": "src/",
+            "DVDoug\\DB\\Test\\": "tests/"
+        }
+    }
 }

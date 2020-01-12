@@ -1,7 +1,9 @@
 <?php
 
-  namespace DVDoug\DB;
+  namespace DVDoug\DB\Test;
   
+  use DVDoug\DB\DatabaseInterface;
+  use DVDoug\DB\MySQLPDODatabase;
   use PHPUnit\Framework\TestCase;
 
   class MySQLPDOTest extends TestCase {
