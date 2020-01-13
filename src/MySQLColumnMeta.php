@@ -109,7 +109,7 @@ namespace DVDoug\DB;
                                                       DATA_TYPE,
                                                       CHARACTER_MAXIMUM_LENGTH,
                                                       NUMERIC_PRECISION,
-                                                      COALESCE(DATETIME_PRECISION, NUMERIC_SCALE) AS SCALE,
+                                                      COALESCE(/*!56000 DATETIME_PRECISION, */NUMERIC_SCALE) AS SCALE,
                                                       IS_NULLABLE,
                                                       COLUMN_TYPE
                                                FROM INFORMATION_SCHEMA.COLUMNS
