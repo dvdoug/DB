@@ -1,6 +1,4 @@
 language: php
-services:
-  - mysql
 
 env:
 php:
@@ -34,7 +32,7 @@ cache:
     - $HOME/.cache/opcache
 
 before_install:
-  - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
+  - docker-compose -f tests/docker-compose.yml up -d
 
 install:
   - composer validate --strict
