@@ -117,8 +117,8 @@ abstract class PDODatabase extends \PDO implements DatabaseInterface
         $primaryKey = $this->getPrimaryKey($aDatabase, $aTable);
         $indexes = $this->getIndexes($aDatabase, $aTable);
 
-        $tableDef = "CREATE TABLE `{$table}` (" . PHP_EOL;
-        $tableDef .= implode(',' . PHP_EOL, $colDefs);
+        $tableDef = "CREATE TABLE `{$table}` (" . "\n";
+        $tableDef .= implode(',' . "\n", $colDefs);
 
         if ($primaryKey) {
             $length = 0;
@@ -126,9 +126,9 @@ abstract class PDODatabase extends \PDO implements DatabaseInterface
                 $length += $columns[$primaryCol]->getLength();
             }
             if ($length <= 191) { //skip index if too long for MySQL
-                $tableDef .= ',' . PHP_EOL . PHP_EOL;
+                $tableDef .= ',' . "\n" . "\n";
                 $tableDef .= 'PRIMARY KEY (';
-                $tableDef .= implode(', ' . PHP_EOL, array_map(function ($c) {return '`' . strtolower($c) . '`'; }, $primaryKey));
+                $tableDef .= implode(', ' . "\n", array_map(function ($c) {return '`' . strtolower($c) . '`'; }, $primaryKey));
                 $tableDef .= ')';
             }
         }
@@ -150,7 +150,7 @@ abstract class PDODatabase extends \PDO implements DatabaseInterface
                         continue 2;
                     }
                 }
-                $tableDef .= ',' . PHP_EOL;
+                $tableDef .= ',' . "\n";
                 $tableDef .= 'KEY `' . strtolower($indexName) . '` (';
                 $tableDef .= implode(', ', array_map(function ($c) {return '`' . strtolower($c) . '`'; }, $indexColumns));
                 $tableDef .= ')';
@@ -188,13 +188,13 @@ abstract class PDODatabase extends \PDO implements DatabaseInterface
         $primaryKey = $this->getPrimaryKey($aDatabase, $aTable);
         $indexes = $this->getIndexes($aDatabase, $aTable);
 
-        $tableDef = "CREATE TABLE `{$table}` (" . PHP_EOL;
-        $tableDef .= implode(',' . PHP_EOL, $colDefs);
+        $tableDef = "CREATE TABLE `{$table}` (" . "\n";
+        $tableDef .= implode(',' . "\n", $colDefs);
 
         if ($primaryKey) {
-            $tableDef .= ',' . PHP_EOL . PHP_EOL;
+            $tableDef .= ',' . "\n" . "\n";
             $tableDef .= 'PRIMARY KEY (';
-            $tableDef .= implode(', ' . PHP_EOL, array_map(function ($c) {return '"' . strtolower($c) . '"'; }, $primaryKey));
+            $tableDef .= implode(', ' . "\n", array_map(function ($c) {return '"' . strtolower($c) . '"'; }, $primaryKey));
             $tableDef .= ')';
         }
 
@@ -205,7 +205,7 @@ abstract class PDODatabase extends \PDO implements DatabaseInterface
                         continue 2;
                     }
                 }
-                $tableDef .= ',' . PHP_EOL;
+                $tableDef .= ',' . "\n";
                 $tableDef .= 'KEY `' . strtolower($indexName) . '` (';
                 $tableDef .= implode(', ', array_map(function ($c) {return '"' . strtolower($c) . '"'; }, $indexColumns));
                 $tableDef .= ')';

@@ -15,7 +15,7 @@ abstract class MySQLPDOBaseTest extends TestCase
     protected function setUp()
     {
         $SQL = file_get_contents(__DIR__ . '/MySQL.sql');
-        $statements = explode(";\r\n", $SQL);
+        $statements = explode(";\n", $SQL);
         foreach ($statements as $statement) {
             static::$conn->exec($statement);
         }
