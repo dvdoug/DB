@@ -1,9 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 return PhpCsFixer\Config::create()
     ->setRules([
         '@Symfony' => true,
         '@Symfony:risky' => true,
+        '@PHP71Migration' => true,
+        '@PHP71Migration:risky' => true,
+        '@PHP73Migration' => true,
         'array_syntax' => ['syntax' => 'short'],
         'concat_space' => ['spacing' => 'one'],
         'fopen_flags' => ['b_mode' => true],

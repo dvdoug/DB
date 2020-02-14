@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Database Access Layer.
  * @author Doug Wright
@@ -15,27 +17,27 @@ interface DatabaseInterface
     /**
      * Param is null.
      */
-    const PARAM_IS_NULL = 0;
+    public const PARAM_IS_NULL = 0;
 
     /**
      * Param is int.
      */
-    const PARAM_IS_INT = 1;
+    public const PARAM_IS_INT = 1;
 
     /**
      * Param is string.
      */
-    const PARAM_IS_STR = 2;
+    public const PARAM_IS_STR = 2;
 
     /**
      * Param is blob.
      */
-    const PARAM_IS_BLOB = 3;
+    public const PARAM_IS_BLOB = 3;
 
     /**
      * Param is boolean.
      */
-    const PARAM_IS_BOOL = 5;
+    public const PARAM_IS_BOOL = 5;
 
     /**
      * Prepares a SQL statement for execution and returns a statement object.

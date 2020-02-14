@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DVDoug\DB\Test;
 
 use DVDoug\DB\DatabaseInterface;
@@ -12,7 +14,7 @@ class MySQLPDO55Test extends MySQLPDOBaseTest
      */
     public static $conn;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!extension_loaded('pdo_mysql')) {
             $this->markTestSkipped();

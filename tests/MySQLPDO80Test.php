@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DVDoug\DB\Test;
 
 use DVDoug\DB\DatabaseInterface;
@@ -12,9 +14,9 @@ class MySQLPDO80Test extends MySQLPDOBaseTest
      */
     public static $conn;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        if (PHP_MAJOR_VERSION < 7 || !extension_loaded('pdo_mysql')) { //PHP5 doesn't seem to like MySQL8
+        if (!extension_loaded('pdo_mysql')) {
             $this->markTestSkipped();
         }
 
