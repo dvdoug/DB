@@ -25,77 +25,68 @@ interface ColumnMetaInterface
 
     /**
      * Get column name.
-     * @return string
      */
-    public function getName();
+    public function getName(): string;
 
     /**
      * Get column type as used by originating database.
-     * @return string
      */
-    public function getOriginalType();
+    public function getOriginalType(): string;
 
     /**
      * Get column type as suitable for MySQL.
-     * @return string
      */
-    public function getMySQLType();
+    public function getMySQLType(): string;
 
     /**
      * Get column type as suitable for Oracle.
-     * @return string
      */
-    public function getOracleType();
+    public function getOracleType(): string;
 
     /**
      * Get length of column.
-     * @return int
      */
-    public function getLength();
+    public function getLength(): int;
 
     /**
      * Get column precision (number of digits).
      * @return int|null int for numeric columns, null for non-numeric
      */
-    public function getPrecision();
+    public function getPrecision(): ?int;
 
     /**
      * Get column scale (number of digits after decimal place).
      * @return int|null int for numeric columns, null for non-numeric
      */
-    public function getScale();
+    public function getScale(): ?int;
 
     /**
-     * Get column name.
-     * @return bool
+     * Get whether column is nullable.
      */
-    public function isNullable();
+    public function isNullable(): bool;
 
     /**
-     * Get column name.
-     * @return string
+     * Get max value.
      */
-    public function getMaxValue();
+    public function getMaxValue(): ?string;
 
     /**
-     * Get column name.
-     * @return string
+     * Get min value.
      */
-    public function getMinValue();
+    public function getMinValue(): ?string;
 
     /**
      * The number of distinct values in this column.
-     * @return int
      */
-    public function getDistinctValueCount();
+    public function getDistinctValueCount(): int;
 
     /**
      * Get MySQL column definition.
      */
-    public function getMySQLColumnDef();
+    public function getMySQLColumnDef(): string;
 
     /**
      * Get Oracle column definition.
      */
-    public function getOracleColumnDef();
+    public function getOracleColumnDef(): string;
 }

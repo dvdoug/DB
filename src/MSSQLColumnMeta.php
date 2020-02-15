@@ -20,73 +20,62 @@ class MSSQLColumnMeta implements ColumnMetaInterface
      * Database connection.
      * @var DatabaseInterface
      */
-    protected $connection;
+    protected DatabaseInterface $connection;
 
     /**
      * Database name.
-     * @var string
      */
-    protected $database;
+    protected string $database;
 
     /**
      * Table name.
-     * @var string
      */
-    protected $table;
+    protected string $table;
 
     /**
      * Column name.
-     * @var string
      */
-    protected $name;
+    protected string $name;
 
     /**
      * Column type.
-     * @var string
      */
-    protected $type;
+    protected string $type;
 
     /**
      * Column length.
-     * @var int
      */
-    protected $length;
+    protected int $length;
 
     /**
      * Column precision.
-     * @var int|null
      */
-    protected $precision;
+    protected ?int $precision;
 
     /**
      * Column scale.
-     * @var int|null
      */
-    protected $scale;
+    protected ?int $scale;
 
     /**
      * Column nullable?
-     * @var bool
      */
-    protected $isNullable;
+    protected bool $isNullable;
 
     /**
      * Column max value.
-     * @var string
      */
-    protected $maxValue;
+    protected ?string $maxValue;
 
     /**
      * Column min value.
-     * @var string
      */
-    protected $minValue;
+    protected ?string $minValue;
 
     /**
      * Number of distinct values.
-     * @var int
      */
-    protected $distinctValues;
+    protected int $distinctValues;
 
     /**
      * Constructor.
@@ -157,18 +146,16 @@ class MSSQLColumnMeta implements ColumnMetaInterface
 
     /**
      * Get column name.
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
     /**
      * Get column type as used by originating database.
-     * @return string
      */
-    public function getOriginalType()
+    public function getOriginalType(): string
     {
         return $this->type;
     }
@@ -177,9 +164,8 @@ class MSSQLColumnMeta implements ColumnMetaInterface
      * Get column type as suitable for MySQL.
      *
      * @throws \Exception
-     * @return string
      */
-    public function getMySQLType()
+    public function getMySQLType(): string
     {
         switch ($this->type) {
             case 'BIT':
@@ -305,9 +291,8 @@ class MSSQLColumnMeta implements ColumnMetaInterface
      * Get column type as suitable for Oracle.
      *
      * @throws \Exception
-     * @return string
      */
-    public function getOracleType()
+    public function getOracleType(): string
     {
         switch ($this->type) {
             case 'BIT':
@@ -385,9 +370,8 @@ class MSSQLColumnMeta implements ColumnMetaInterface
 
     /**
      * Get length of column.
-     * @return int
      */
-    public function getLength()
+    public function getLength(): int
     {
         switch ($this->getOriginalType()) {
             case 'TINYINT':
@@ -423,55 +407,49 @@ class MSSQLColumnMeta implements ColumnMetaInterface
 
     /**
      * Get column precision (number of digits).
-     * @return int|null int for numeric columns, null for non-numeric
      */
-    public function getPrecision()
+    public function getPrecision(): ?int
     {
         return $this->precision;
     }
 
     /**
      * Get column scale (number of digits after decimal place).
-     * @return int|null int for numeric columns, null for non-numeric
      */
-    public function getScale()
+    public function getScale(): ?int
     {
         return $this->scale;
     }
 
     /**
-     * Get column name.
-     * @return string
+     * Get whether column is nullable.
      */
-    public function isNullable()
+    public function isNullable(): bool
     {
         return $this->isNullable;
     }
 
     /**
-     * Get column name.
-     * @return string
+     * Get max value.
      */
-    public function getMaxValue()
+    public function getMaxValue(): ?string
     {
-        return $this->maxValue ?: PHP_INT_MAX;
+        return $this->maxValue;
     }
 
     /**
-     * Get column name.
-     * @return string
+     * Get min value.
      */
-    public function getMinValue()
+    public function getMinValue(): ?string
     {
-        return $this->minValue ?: ~PHP_INT_MAX;
+        return $this->minValue;
     }
 
     /**
      * The number of distinct values in this column.
-     * @return int
      */
-    public function getDistinctValueCount()
+    public function getDistinctValueCount(): int
     {
-        return $this->distinctValues ?: PHP_INT_MAX;
+        return $this->distinctValues;
     }
 }

@@ -12,12 +12,12 @@ namespace DVDoug\DB;
  * PDO-backed database statement.
  * @author Doug Wright
  */
-class PDOStatement extends \PDOStatement
+class PDOStatement extends \PDOStatement implements StatementInterface
 {
     /**
      * Used query string.
      */
-    public function getQueryString()
+    public function getQueryString(): string
     {
         return $this->queryString;
     }
@@ -102,36 +102,33 @@ class PDOStatement extends \PDOStatement
 
     /**
      * Binds a value to a variable.
-     * @param  string $aParam    parameter name of the form :name
-     * @param  mixed  $aVariable mixed The variable to bind to the parameter
-     * @param  int    $aDataType data type for the parameter using the DatabaseInterface::PARAM_* constants
-     * @return bool
+     * @param string $aParam    parameter name of the form :name
+     * @param mixed  $aVariable mixed The variable to bind to the parameter
+     * @param int    $aDataType data type for the parameter using the DatabaseInterface::PARAM_* constants
      */
-    public function bindParamToVariable($aParam, &$aVariable, $aDataType = DatabaseInterface::PARAM_IS_STR)
+    public function bindParamToVariable($aParam, &$aVariable, $aDataType = DatabaseInterface::PARAM_IS_STR): bool
     {
         return $this->bindParam($aParam, $aVariable, $aDataType);
     }
 
     /**
      * Binds a column to a variable.
-     * @param  string $aColumn   column name
-     * @param  mixed  $aVariable mixed The variable to bind to the result
-     * @param  int    $aDataType data type for the column using the DatabaseInterface::PARAM_* constants
-     * @return bool
+     * @param string $aColumn   column name
+     * @param mixed  $aVariable mixed The variable to bind to the result
+     * @param int    $aDataType data type for the column using the DatabaseInterface::PARAM_* constants
      */
-    public function bindResultColumn($aColumn, &$aVariable, $aDataType = DatabaseInterface::PARAM_IS_STR)
+    public function bindResultColumn($aColumn, &$aVariable, $aDataType = DatabaseInterface::PARAM_IS_STR): bool
     {
         return $this->bindColumn($aColumn, $aVariable, $aDataType);
     }
 
     /**
      * Binds a value to a parameter.
-     * @param  string $aParam    parameter name of the form :name
-     * @param  mixed  $aValue    mixed The value to bind to the parameter
-     * @param  int    $aDataType data type for the parameter using the DatabaseInterface::PARAM_* constants
-     * @return bool
+     * @param string $aParam    parameter name of the form :name
+     * @param mixed  $aValue    mixed The value to bind to the parameter
+     * @param int    $aDataType data type for the parameter using the DatabaseInterface::PARAM_* constants
      */
-    public function bindParamToValue($aParam, $aValue, $aDataType = DatabaseInterface::PARAM_IS_STR)
+    public function bindParamToValue($aParam, $aValue, $aDataType = DatabaseInterface::PARAM_IS_STR): bool
     {
         return $this->bindValue($aParam, $aValue, $aDataType);
     }

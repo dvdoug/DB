@@ -33,8 +33,8 @@ abstract class PDODatabase extends \PDO implements DatabaseInterface
     public function __construct($aDSN, $aUsername, $aPassword, array $aDriverOptions = null)
     {
         parent::__construct($aDSN, $aUsername, $aPassword, $aDriverOptions);
-        self::setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-        self::setAttribute(\PDO::ATTR_STATEMENT_CLASS, ['\DVDoug\DB\PDOStatement']);
+        $this->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        $this->setAttribute(\PDO::ATTR_STATEMENT_CLASS, ['\DVDoug\DB\PDOStatement']);
     }
 
     /**
@@ -49,10 +49,9 @@ abstract class PDODatabase extends \PDO implements DatabaseInterface
 
     /**
      * Returns the ID of the last inserted row or sequence value.
-     * @param  string $aName name of the sequence object (if any) from which the ID should be returned
-     * @return string
+     * @param string $aName name of the sequence object (if any) from which the ID should be returned
      */
-    public function getLastInsertId($aName = null)
+    public function getLastInsertId($aName = null): string
     {
         return parent::lastInsertID($aName);
     }
@@ -84,22 +83,20 @@ abstract class PDODatabase extends \PDO implements DatabaseInterface
 
     /**
      * Adds appropriate quotes to an identifier so it can be safely used in an SQL statement.
-     * @param  mixed  $aIdentifier the parameter to be quoted
-     * @return string
+     * @param mixed $aIdentifier the parameter to be quoted
      */
-    public function quoteIdentifier($aIdentifier)
+    public function quoteIdentifier($aIdentifier): string
     {
         return static::IDENTIFIER_OPENQUOTE . $aIdentifier . static::IDENTIFIER_CLOSEQUOTE;
     }
 
     /**
      * Get MySQL table definition.
-     * @param  string $aDatabase       database/schema name
-     * @param  string $aTable          table name
-     * @param  bool   $aSkipUnusedCols whether to skip unused columns
-     * @return string
+     * @param string $aDatabase       database/schema name
+     * @param string $aTable          table name
+     * @param bool   $aSkipUnusedCols whether to skip unused columns
      */
-    public function getMySQLTableDef($aDatabase, $aTable, $aSkipUnusedCols = true)
+    public function getMySQLTableDef($aDatabase, $aTable, $aSkipUnusedCols = true): string
     {
         $table = strtolower($aTable);
 
@@ -165,12 +162,11 @@ abstract class PDODatabase extends \PDO implements DatabaseInterface
 
     /**
      * Get Oracle table definition.
-     * @param  string $aDatabase       database/schema name
-     * @param  string $aTable          table name
-     * @param  bool   $aSkipUnusedCols whether to skip unused columns
-     * @return string
+     * @param string $aDatabase       database/schema name
+     * @param string $aTable          table name
+     * @param bool   $aSkipUnusedCols whether to skip unused columns
      */
-    public function getOracleTableDef($aDatabase, $aTable, $aSkipUnusedCols = true)
+    public function getOracleTableDef($aDatabase, $aTable, $aSkipUnusedCols = true): string
     {
         $table = strtolower($aTable);
 

@@ -17,13 +17,13 @@ interface StatementInterface extends \Traversable
     /**
      * Used query string.
      */
-    public function getQueryString();
+    public function getQueryString(): string;
 
     /**
      * Executes a prepared statement.
      * @return bool
      */
-    public function execute();
+    public function execute($boundInputParams = null);
 
     /**
      * Fetches the next row(s) from the result set as an associative array.
@@ -61,30 +61,27 @@ interface StatementInterface extends \Traversable
 
     /**
      * Binds a value to a variable.
-     * @param  string $aParam    parameter name of the form :name
-     * @param  mixed  $aVariable mixed The variable to bind to the parameter
-     * @param  int    $aDataType data type for the parameter using the DatabaseInterface::PARAM_* constants
-     * @return bool
+     * @param string $aParam    parameter name of the form :name
+     * @param mixed  $aVariable mixed The variable to bind to the parameter
+     * @param int    $aDataType data type for the parameter using the DatabaseInterface::PARAM_* constants
      */
-    public function bindParamToVariable($aParam, &$aVariable, $aDataType = DatabaseInterface::PARAM_IS_STR);
+    public function bindParamToVariable($aParam, &$aVariable, $aDataType = DatabaseInterface::PARAM_IS_STR): bool;
 
     /**
      * Binds a column to a variable.
-     * @param  string $aColumn   column name
-     * @param  mixed  $aVariable mixed The variable to bind to the result
-     * @param  int    $aDataType data type for the column using the DatabaseInterface::PARAM_* constants
-     * @return bool
+     * @param string $aColumn   column name
+     * @param mixed  $aVariable mixed The variable to bind to the result
+     * @param int    $aDataType data type for the column using the DatabaseInterface::PARAM_* constants
      */
-    public function bindResultColumn($aColumn, &$aVariable, $aDataType = DatabaseInterface::PARAM_IS_STR);
+    public function bindResultColumn($aColumn, &$aVariable, $aDataType = DatabaseInterface::PARAM_IS_STR): bool;
 
     /**
      * Binds a value to a parameter.
-     * @param  string $aParam    parameter name of the form :name
-     * @param  mixed  $aValue    mixed The value to bind to the parameter
-     * @param  int    $aDataType data type for the parameter using the DatabaseInterface::PARAM_* constants
-     * @return bool
+     * @param string $aParam    parameter name of the form :name
+     * @param mixed  $aValue    mixed The value to bind to the parameter
+     * @param int    $aDataType data type for the parameter using the DatabaseInterface::PARAM_* constants
      */
-    public function bindParamToValue($aParam, $aValue, $aDataType = DatabaseInterface::PARAM_IS_STR);
+    public function bindParamToValue($aParam, $aValue, $aDataType = DatabaseInterface::PARAM_IS_STR): bool;
 
     /**
      * Closes the cursor, enabling the statement to be executed again.

@@ -53,10 +53,9 @@ class MSSQLPDODatabase extends PDODatabase
 
     /**
      * List of tables in a database.
-     * @param  string $aDatabase database/schema name
-     * @return array
+     * @param string $aDatabase database/schema name
      */
-    public function getTables($aDatabase = null)
+    public function getTables($aDatabase = null): array
     {
         if ($aDatabase) {
             $statement = $this->prepare('SELECT TABLE_SCHEMA, TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = :database ORDER BY TABLE_NAME ASC');
@@ -85,7 +84,7 @@ class MSSQLPDODatabase extends PDODatabase
      * @param  string                $aTable    table name
      * @return ColumnMetaInterface[]
      */
-    public function getTableColumns($aDatabase, $aTable)
+    public function getTableColumns($aDatabase, $aTable): array
     {
         $statement = $this->prepare('SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = :database AND TABLE_NAME = :table_name ORDER BY ORDINAL_POSITION ASC');
         $statement->bindParamToValue(':database', $aDatabase);
@@ -103,11 +102,10 @@ class MSSQLPDODatabase extends PDODatabase
 
     /**
      * Primary key column(s).
-     * @param  string $aDatabase database/schema name
-     * @param  string $aTable    table name
-     * @return array
+     * @param string $aDatabase database/schema name
+     * @param string $aTable    table name
      */
-    public function getPrimaryKey($aDatabase, $aTable)
+    public function getPrimaryKey($aDatabase, $aTable): array
     {
         $columns = [];
         $SQL = 'SELECT ind.name AS INDEX_NAME,
@@ -154,11 +152,10 @@ class MSSQLPDODatabase extends PDODatabase
 
     /**
      * Non-PK indexes.
-     * @param  string $aDatabase database/schema name
-     * @param  string $aTable    table name
-     * @return array
+     * @param string $aDatabase database/schema name
+     * @param string $aTable    table name
      */
-    public function getIndexes($aDatabase, $aTable)
+    public function getIndexes($aDatabase, $aTable): array
     {
         $indexes = [];
         $SQL = 'SELECT ind.name AS INDEX_NAME,

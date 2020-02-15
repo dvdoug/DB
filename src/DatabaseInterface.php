@@ -41,10 +41,9 @@ interface DatabaseInterface
 
     /**
      * Prepares a SQL statement for execution and returns a statement object.
-     * @param  string             $aSQL
      * @return StatementInterface
      */
-    public function prepare($aSQL);
+    public function prepare($statement, $options = null);
 
     /**
      * Initiates a transaction.
@@ -79,10 +78,9 @@ interface DatabaseInterface
 
     /**
      * Returns the ID of the last inserted row or sequence value.
-     * @param  string $aName name of the sequence object (if any) from which the ID should be returned
-     * @return string
+     * @param string $aName name of the sequence object (if any) from which the ID should be returned
      */
-    public function getLastInsertId($aName = null);
+    public function getLastInsertId($aName = null): string;
 
     /**
      * Escapes/quotes a parameter for use in a query.
@@ -94,17 +92,15 @@ interface DatabaseInterface
 
     /**
      * Adds appropriate quotes to an identifier so it can be safely used in an SQL statement.
-     * @param  mixed  $aIdentifier the parameter to be quoted
-     * @return string
+     * @param mixed $aIdentifier the parameter to be quoted
      */
-    public function quoteIdentifier($aIdentifier);
+    public function quoteIdentifier($aIdentifier): string;
 
     /**
      * List of tables in a database.
-     * @param  string $aDatabase database/schema name
-     * @return array
+     * @param string $aDatabase database/schema name
      */
-    public function getTables($aDatabase = null);
+    public function getTables($aDatabase = null): array;
 
     /**
      * List of columns (and types) in a table.
@@ -112,39 +108,35 @@ interface DatabaseInterface
      * @param  string                $aTable    table name
      * @return ColumnMetaInterface[]
      */
-    public function getTableColumns($aDatabase, $aTable);
+    public function getTableColumns($aDatabase, $aTable): array;
 
     /**
      * Primary key column(s).
-     * @param  string $aDatabase database/schema name
-     * @param  string $aTable    table name
-     * @return array
+     * @param string $aDatabase database/schema name
+     * @param string $aTable    table name
      */
-    public function getPrimaryKey($aDatabase, $aTable);
+    public function getPrimaryKey($aDatabase, $aTable): array;
 
     /**
      * Non-PK indexes.
-     * @param  string $aDatabase database/schema name
-     * @param  string $aTable    table name
-     * @return array
+     * @param string $aDatabase database/schema name
+     * @param string $aTable    table name
      */
-    public function getIndexes($aDatabase, $aTable);
+    public function getIndexes($aDatabase, $aTable): array;
 
     /**
      * Get MySQL table definition.
-     * @param  string $aDatabase       database/schema name
-     * @param  string $aTable          table name
-     * @param  bool   $aSkipUnusedCols whether to skip unused columns
-     * @return string
+     * @param string $aDatabase       database/schema name
+     * @param string $aTable          table name
+     * @param bool   $aSkipUnusedCols whether to skip unused columns
      */
-    public function getMySQLTableDef($aDatabase, $aTable, $aSkipUnusedCols = true);
+    public function getMySQLTableDef($aDatabase, $aTable, $aSkipUnusedCols = true): string;
 
     /**
      * Get Oracle table definition.
-     * @param  string $aDatabase       database/schema name
-     * @param  string $aTable          table name
-     * @param  bool   $aSkipUnusedCols whether to skip unused columns
-     * @return string
+     * @param string $aDatabase       database/schema name
+     * @param string $aTable          table name
+     * @param bool   $aSkipUnusedCols whether to skip unused columns
      */
-    public function getOracleTableDef($aDatabase, $aTable, $aSkipUnusedCols = true);
+    public function getOracleTableDef($aDatabase, $aTable, $aSkipUnusedCols = true): string;
 }

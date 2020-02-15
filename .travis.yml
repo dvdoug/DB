@@ -10,7 +10,6 @@ matrix:
       env: FORCE_LATEST=1
     - php: 7.4
       env: PREFER_LOWEST=1
-      dist: trusty
     - php: 7.4
       env: CSFIXER=1
   allow_failures:

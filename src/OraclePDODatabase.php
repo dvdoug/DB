@@ -29,10 +29,9 @@ class OraclePDODatabase extends PDODatabase
 
     /**
      * List of tables in a database.
-     * @param  string $aDatabase database/schema name
-     * @return array
+     * @param string $aDatabase database/schema name
      */
-    public function getTables($aDatabase = null)
+    public function getTables($aDatabase = null): array
     {
         if ($aDatabase) {
             $statement = $this->prepare('SELECT OWNER, TABLE_NAME FROM ALL_TABLES WHERE OWNER = :owner ORDER BY TABLE_NAME ASC');
@@ -61,7 +60,7 @@ class OraclePDODatabase extends PDODatabase
      * @param  string                $aTable    table name
      * @return ColumnMetaInterface[]
      */
-    public function getTableColumns($aDatabase, $aTable)
+    public function getTableColumns($aDatabase, $aTable): array
     {
         $statement = $this->prepare('SELECT COLUMN_NAME FROM ALL_TAB_COLUMNS WHERE OWNER = :owner AND TABLE_NAME = :table_name ORDER BY COLUMN_ID ASC');
         $statement->bindParamToValue(':owner', $aDatabase);
@@ -80,11 +79,10 @@ class OraclePDODatabase extends PDODatabase
 
     /**
      * Primary key column(s).
-     * @param  string $aDatabase database/schema name
-     * @param  string $aTable    table name
-     * @return array
+     * @param string $aDatabase database/schema name
+     * @param string $aTable    table name
      */
-    public function getPrimaryKey($aDatabase, $aTable)
+    public function getPrimaryKey($aDatabase, $aTable): array
     {
         $columns = [];
         $SQL = "SELECT COLS.POSITION, COLS.COLUMN_NAME
@@ -111,11 +109,10 @@ class OraclePDODatabase extends PDODatabase
 
     /**
      * Non-PK indexes.
-     * @param  string $aDatabase database/schema name
-     * @param  string $aTable    table name
-     * @return array
+     * @param string $aDatabase database/schema name
+     * @param string $aTable    table name
      */
-    public function getIndexes($aDatabase, $aTable)
+    public function getIndexes($aDatabase, $aTable): array
     {
         $indexes = [];
         $SQL = 'SELECT INDEX_NAME, COLUMN_NAME

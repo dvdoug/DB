@@ -17,7 +17,7 @@ trait DDLGeneration
     /**
      * Get MySQL column definition.
      */
-    public function getMySQLColumnDef()
+    public function getMySQLColumnDef(): string
     {
         $def = '`' . strtolower($this->getName()) . '` ';
         $MySQLType = $this->getMySQLType();
@@ -96,7 +96,7 @@ trait DDLGeneration
     /**
      * Get Oracle column definition.
      */
-    public function getOracleColumnDef()
+    public function getOracleColumnDef(): string
     {
         $def = '`' . strtolower($this->getName()) . '` ';
 
