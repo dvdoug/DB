@@ -18,7 +18,6 @@ class MSSQLColumnMeta implements ColumnMetaInterface
 
     /**
      * Database connection.
-     * @var DatabaseInterface
      */
     protected DatabaseInterface $connection;
 
