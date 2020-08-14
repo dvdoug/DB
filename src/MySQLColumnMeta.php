@@ -19,62 +19,62 @@ namespace DVDoug\DB;
       /**
        * Database connection.
        */
-      protected $connection;
+      protected DatabaseInterface $connection;
 
       /**
        * Database name.
        */
-      protected $database;
+      protected string $database;
 
       /**
        * Table name.
        */
-      protected $table;
+      protected string $table;
 
       /**
        * Column name.
        */
-      protected $name;
+      protected string $name;
 
       /**
        * Column type.
        */
-      protected $type;
+      protected string $type;
 
       /**
        * Column length.
        */
-      protected $length;
+      protected int $length;
 
       /**
        * Column precision.
        */
-      protected $precision;
+      protected ?int $precision;
 
       /**
        * Column scale.
        */
-      protected $scale;
+      protected ?int $scale;
 
       /**
        * Column nullable?
        */
-      protected $isNullable;
+      protected bool $isNullable;
 
       /**
        * Column max value.
        */
-      protected $maxValue;
+      protected ?string $maxValue;
 
       /**
        * Column min value.
        */
-      protected $minValue;
+      protected ?string $minValue;
 
       /**
        * Number of distinct values.
        */
-      protected $distinctValues;
+      protected int $distinctValues;
 
       /**
        * Constructor.

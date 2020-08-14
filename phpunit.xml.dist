@@ -7,22 +7,22 @@
          bootstrap="vendor/autoload.php"
 >
 
-  <testsuites>
-    <testsuite name="DB">
-      <directory>tests</directory>
-    </testsuite>
-  </testsuites>
+    <testsuites>
+        <testsuite name="DB">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
 
-  <filter>
-    <whitelist processUncoveredFilesFromWhitelist="true">
-      <directory suffix=".php">src</directory>
-    </whitelist>
-  </filter>
+    <coverage pathCoverage="true" processUncoveredFiles="true" cacheDirectory="build/php-code-coverage-cache">
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
 
-  <logging>
-    <log type="coverage-text" target="php://stdout" showUncoveredFiles="true"/>
-    <log type="coverage-html" target="build/coverage-phpunit" showUncoveredFiles="true"/>
-    <log type="coverage-clover" target="build/coverage-phpunit/clover.xml" showUncoveredFiles="true"/>
-  </logging>
+        <report>
+            <text outputFile="php://stdout" showUncoveredFiles="true"/>
+            <html outputDirectory="build/coverage-phpunit"/>
+            <clover outputFile="build/coverage-phpunit/clover.xml"/>
+        </report>
+    </coverage>
 
 </phpunit>

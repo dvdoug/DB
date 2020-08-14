@@ -17,12 +17,12 @@ abstract class PDODatabase extends \PDO implements DatabaseInterface
     /**
      * Character to use when quoting identifiers.
      */
-    const IDENTIFIER_OPENQUOTE = '"';
+    public const IDENTIFIER_OPENQUOTE = '"';
 
     /**
      * Character to use when quoting identifiers.
      */
-    const IDENTIFIER_CLOSEQUOTE = '"';
+    public const IDENTIFIER_CLOSEQUOTE = '"';
 
     /**
      * Constructor.
