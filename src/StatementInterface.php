@@ -23,7 +23,7 @@ interface StatementInterface extends \Traversable
      * Executes a prepared statement.
      * @return bool
      */
-    public function execute($boundInputParams = null);
+    public function execute(?array $boundInputParams);
 
     /**
      * Fetches the next row(s) from the result set as an associative array.

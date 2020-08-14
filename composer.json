@@ -5,7 +5,7 @@
     "homepage": "https://github.com/dvdoug/DB",
     "license": "MIT",
     "require": {
-        "php": "^7.4",
+        "php": "^7.4||^8.0",
         "ext-pdo": "*"
     },
     "require-dev": {
@@ -23,6 +23,7 @@
         "psr-4": {
             "DVDoug\\DB\\": "src/",
             "DVDoug\\DB\\Test\\": "tests/"
-        }
+        },
+        "files": ["src/bridge.php"]
     }
 }

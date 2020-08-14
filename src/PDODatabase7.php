@@ -38,6 +38,16 @@ abstract class PDODatabase extends \PDO implements DatabaseInterface
     }
 
     /**
+     * Executes an SQL statement, returning the result set if any as a StatementInterface object.
+     * @param  string                  $aSQL the SQL statement to execute
+     * @return StatementInterface|bool
+     */
+    public function query($aSQL)
+    {
+        return parent::query($aSQL);
+    }
+
+    /**
      * Returns the ID of the last inserted row or sequence value.
      * @param string $aName name of the sequence object (if any) from which the ID should be returned
      */

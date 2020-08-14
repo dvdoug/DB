@@ -74,7 +74,7 @@ interface DatabaseInterface
      * @param  string                  $aSQL the SQL statement to execute
      * @return StatementInterface|bool
      */
-    public function query(string $aSQL);
+    public function query($aSQL);
 
     /**
      * Returns the ID of the last inserted row or sequence value.
