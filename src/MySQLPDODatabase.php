@@ -17,12 +17,12 @@ class MySQLPDODatabase extends PDODatabase
     /**
      * Character to use when quoting identifiers.
      */
-    public const IDENTIFIER_OPENQUOTE = '`';
+    const IDENTIFIER_OPENQUOTE = '`';
 
     /**
      * Character to use when quoting identifiers.
      */
-    public const IDENTIFIER_CLOSEQUOTE = '`';
+    const IDENTIFIER_CLOSEQUOTE = '`';
 
     /**
      * Constructor.

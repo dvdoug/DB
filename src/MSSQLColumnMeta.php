@@ -19,62 +19,62 @@ class MSSQLColumnMeta implements ColumnMetaInterface
     /**
      * Database connection.
      */
-    protected DatabaseInterface $connection;
+    protected $connection;
 
     /**
      * Database name.
      */
-    protected string $database;
+    protected $database;
 
     /**
      * Table name.
      */
-    protected string $table;
+    protected $table;
 
     /**
      * Column name.
      */
-    protected string $name;
+    protected $name;
 
     /**
      * Column type.
      */
-    protected string $type;
+    protected $type;
 
     /**
      * Column length.
      */
-    protected int $length;
+    protected $length;
 
     /**
      * Column precision.
      */
-    protected ?int $precision;
+    protected $precision;
 
     /**
      * Column scale.
      */
-    protected ?int $scale;
+    protected $scale;
 
     /**
      * Column nullable?
      */
-    protected bool $isNullable;
+    protected $isNullable;
 
     /**
      * Column max value.
      */
-    protected ?string $maxValue;
+    protected $maxValue;
 
     /**
      * Column min value.
      */
-    protected ?string $minValue;
+    protected $minValue;
 
     /**
      * Number of distinct values.
      */
-    protected int $distinctValues;
+    protected $distinctValues;
 
     /**
      * Constructor.

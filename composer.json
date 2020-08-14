@@ -5,12 +5,13 @@
     "homepage": "https://github.com/dvdoug/DB",
     "license": "MIT",
     "require": {
-        "php": ">=7.4",
+        "php": "^7.1",
         "ext-pdo": "*"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.16.2",
-        "phpunit/phpunit": "^9.1"
+        "friendsofphp/php-cs-fixer": "^2.16.4",
+        "phpunit/phpunit": "^7.5.20||^8.5.8||^9.3.5"
+
     },
     "config": {
         "preferred-install": {

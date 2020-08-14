@@ -17,27 +17,27 @@ interface DatabaseInterface
     /**
      * Param is null.
      */
-    public const PARAM_IS_NULL = 0;
+    const PARAM_IS_NULL = 0;
 
     /**
      * Param is int.
      */
-    public const PARAM_IS_INT = 1;
+    const PARAM_IS_INT = 1;
 
     /**
      * Param is string.
      */
-    public const PARAM_IS_STR = 2;
+    const PARAM_IS_STR = 2;
 
     /**
      * Param is blob.
      */
-    public const PARAM_IS_BLOB = 3;
+    const PARAM_IS_BLOB = 3;
 
     /**
      * Param is boolean.
      */
-    public const PARAM_IS_BOOL = 5;
+    const PARAM_IS_BOOL = 5;
 
     /**
      * Prepares a SQL statement for execution and returns a statement object.
