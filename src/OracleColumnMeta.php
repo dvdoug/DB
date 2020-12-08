@@ -233,7 +233,6 @@ class OracleColumnMeta implements ColumnMetaInterface
 
             // no break
             case 'DATE':
-
                 /*
                  * Work out whether date or datetime
                  */

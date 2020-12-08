@@ -95,7 +95,7 @@ namespace DVDoug\DB;
            */
           $statement = $this->connection->prepare('SELECT TABLE_SCHEMA,
                                                       TABLE_NAME,
-                                                      COLUMN_NAME, 
+                                                      COLUMN_NAME,
                                                       DATA_TYPE,
                                                       CHARACTER_MAXIMUM_LENGTH,
                                                       NUMERIC_PRECISION,
