@@ -8,6 +8,20 @@ declare(strict_types=1);
 
 namespace DVDoug\DB;
 
+use function addslashes;
+use function array_intersect_key;
+use function array_map;
+use function array_unique;
+use function asort;
+use function explode;
+use function implode;
+use function in_array;
+use function sprintf;
+use function strpos;
+use function strtolower;
+use function substr;
+use function trim;
+
 /**
  * Metadata about a database column.
  * @author Doug Wright

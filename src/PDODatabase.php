@@ -8,11 +8,22 @@ declare(strict_types=1);
 
 namespace DVDoug\DB;
 
+use function array_keys;
+use function array_map;
+use function ctype_digit;
+use function implode;
+use function in_array;
+use function is_int;
+use PDO;
+use function preg_match;
+use RuntimeException;
+use function strtolower;
+
 /**
  * PDO-backed database connection (common parts).
  * @author Doug Wright
  */
-abstract class PDODatabase extends \PDO implements DatabaseInterface
+abstract class PDODatabase extends PDO implements DatabaseInterface
 {
     /**
      * Character to use when quoting identifiers.
@@ -33,8 +44,8 @@ abstract class PDODatabase extends \PDO implements DatabaseInterface
     public function __construct($aDSN, $aUsername, $aPassword, array $aDriverOptions = null)
     {
         parent::__construct($aDSN, $aUsername, $aPassword, $aDriverOptions);
-        $this->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-        $this->setAttribute(\PDO::ATTR_STATEMENT_CLASS, ['\DVDoug\DB\PDOStatement']);
+        $this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $this->setAttribute(PDO::ATTR_STATEMENT_CLASS, ['\DVDoug\DB\PDOStatement']);
     }
 
     /**
@@ -52,8 +63,8 @@ abstract class PDODatabase extends \PDO implements DatabaseInterface
      * @param mixed $aParam     the parameter to be quoted
      * @param int   $aParamType data type hint for drivers
      *
-     * @throws \RuntimeException
-     * @return string            a quoted string that is theoretically safe to pass into an SQL statement
+     * @throws RuntimeException
+     * @return string           a quoted string that is theoretically safe to pass into an SQL statement
      */
     public function escape($aParam, $aParamType = DatabaseInterface::PARAM_IS_STR)
     {
@@ -62,7 +73,7 @@ abstract class PDODatabase extends \PDO implements DatabaseInterface
                 if (is_int($aParam) || ctype_digit($aParam)) {
                     return (int) $aParam;
                 } else {
-                    throw new \RuntimeException("Parameter {$aParam} is not an integer");
+                    throw new RuntimeException("Parameter {$aParam} is not an integer");
                 }
                 break;
 

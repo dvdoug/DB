@@ -8,11 +8,13 @@ declare(strict_types=1);
 
 namespace DVDoug\DB;
 
+use Traversable;
+
 /**
  * Represents a prepared statement and, after the statement is executed, an associated result set.
  * @author Doug Wright
  */
-interface StatementInterface extends \Traversable
+interface StatementInterface extends Traversable
 {
     /**
      * Used query string.

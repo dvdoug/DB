@@ -8,6 +8,11 @@ declare(strict_types=1);
 
 namespace DVDoug\DB;
 
+use Exception;
+use function sprintf;
+use function strpos;
+use function strtoupper;
+
   /**
    * Metadata about a database column.
    * @author Doug Wright
@@ -163,7 +168,7 @@ namespace DVDoug\DB;
       /**
        * Get column type as suitable for Oracle.
        *
-       * @throws \Exception
+       * @throws Exception
        */
       public function getOracleType(): string
       {
@@ -230,7 +235,7 @@ namespace DVDoug\DB;
           return 'NCLOB';
 
         default:
-          throw new \Exception("Unknown conversion for column type {$this->type}");
+          throw new Exception("Unknown conversion for column type {$this->type}");
       }
       }
 

@@ -8,6 +8,13 @@ declare(strict_types=1);
 
 namespace DVDoug\DB;
 
+use function abs;
+use function bccomp;
+use Exception;
+use function max;
+use function sprintf;
+use function strpos;
+
 /**
  * Metadata about a database column.
  * @author Doug Wright
@@ -139,7 +146,7 @@ class OracleColumnMeta implements ColumnMetaInterface
             $data = $this->connection->query($query)->fetchAssoc(false);
             $this->maxValue = $data['ROWMAX'];
             $this->minValue = $data['ROWMIN'];
-        } catch (\Exception $e) { //LONG column has restrictions on querying, so just get total value count
+        } catch (Exception $e) { //LONG column has restrictions on querying, so just get total value count
             if (strpos($e->getMessage(), 'ORA-00997: illegal use of LONG datatype') !== false) {
                 $query = sprintf('SELECT COUNT(*) AS COUNT FROM %s.%s WHERE %s IS NOT NULL',
                     $this->connection->quoteIdentifier($this->database),
@@ -169,7 +176,7 @@ class OracleColumnMeta implements ColumnMetaInterface
     /**
      * Get column type as suitable for MySQL.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function getMySQLType(): string
     {
@@ -272,7 +279,7 @@ class OracleColumnMeta implements ColumnMetaInterface
                 return 'LONGTEXT';
 
             default:
-                throw new \Exception("Unknown conversion for column type {$this->type}");
+                throw new Exception("Unknown conversion for column type {$this->type}");
         }
     }
 

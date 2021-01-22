@@ -8,6 +8,11 @@ declare(strict_types=1);
 
 namespace DVDoug\DB;
 
+use Exception;
+use function in_array;
+use function sprintf;
+use function strtoupper;
+
 /**
  * Metadata about a database column.
  * @author Doug Wright
@@ -162,7 +167,7 @@ class MSSQLColumnMeta implements ColumnMetaInterface
     /**
      * Get column type as suitable for MySQL.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function getMySQLType(): string
     {
@@ -282,14 +287,14 @@ class MSSQLColumnMeta implements ColumnMetaInterface
                 break;
 
             default:
-                throw new \Exception("Unknown conversion for column type {$this->type}");
+                throw new Exception("Unknown conversion for column type {$this->type}");
         }
     }
 
     /**
      * Get column type as suitable for Oracle.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function getOracleType(): string
     {
@@ -363,7 +368,7 @@ class MSSQLColumnMeta implements ColumnMetaInterface
                 break;
 
             default:
-                throw new \Exception("Unknown conversion for column type {$this->type}");
+                throw new Exception("Unknown conversion for column type {$this->type}");
         }
     }
 

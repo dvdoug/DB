@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace DVDoug\DB;
 
+use PDO;
+
 /**
  * PDO-backed database statement.
  * @author Doug Wright
@@ -32,12 +34,12 @@ class PDOStatement extends \PDOStatement implements StatementInterface
     {
         if ($aAllRows) {
             if ($aGroupByFirstCol) {
-                return $this->fetchAll(\PDO::FETCH_ASSOC | \PDO::FETCH_GROUP);
+                return $this->fetchAll(PDO::FETCH_ASSOC | PDO::FETCH_GROUP);
             } else {
-                return $this->fetchAll(\PDO::FETCH_ASSOC);
+                return $this->fetchAll(PDO::FETCH_ASSOC);
             }
         } else {
-            return $this->fetch(\PDO::FETCH_ASSOC);
+            return $this->fetch(PDO::FETCH_ASSOC);
         }
     }
 
@@ -51,12 +53,12 @@ class PDOStatement extends \PDOStatement implements StatementInterface
     {
         if ($aAllRows) {
             if ($aGroupByFirstCol) {
-                return $this->fetchAll(\PDO::FETCH_KEY_PAIR | \PDO::FETCH_GROUP);
+                return $this->fetchAll(PDO::FETCH_KEY_PAIR | PDO::FETCH_GROUP);
             } else {
-                return $this->fetchAll(\PDO::FETCH_KEY_PAIR);
+                return $this->fetchAll(PDO::FETCH_KEY_PAIR);
             }
         } else {
-            return $this->fetch(\PDO::FETCH_KEY_PAIR);
+            return $this->fetch(PDO::FETCH_KEY_PAIR);
         }
     }
 
@@ -72,19 +74,19 @@ class PDOStatement extends \PDOStatement implements StatementInterface
     public function fetchObj($aClassName = 'stdClass', $aConstructorArguments = [], $aRunConstructorFirst = true, $aAllRows = true, $aGroupByFirstCol = false)
     {
         if ($aRunConstructorFirst) {
-            $this->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $aClassName, $aConstructorArguments);
+            $this->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $aClassName, $aConstructorArguments);
         } else {
-            $this->setFetchMode(\PDO::FETCH_CLASS, $aClassName, $aConstructorArguments);
+            $this->setFetchMode(PDO::FETCH_CLASS, $aClassName, $aConstructorArguments);
         }
 
         if ($aAllRows) {
             if ($aGroupByFirstCol) {
-                return $this->fetchAll(\PDO::FETCH_CLASS | \PDO::FETCH_GROUP);
+                return $this->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_GROUP);
             } else {
-                return $this->fetchAll(\PDO::FETCH_CLASS);
+                return $this->fetchAll(PDO::FETCH_CLASS);
             }
         } else {
-            return $this->fetch(\PDO::FETCH_CLASS);
+            return $this->fetch(PDO::FETCH_CLASS);
         }
     }
 
@@ -95,9 +97,9 @@ class PDOStatement extends \PDOStatement implements StatementInterface
      */
     public function fetchIntoObj($aObject)
     {
-        $this->setFetchMode(\PDO::FETCH_INTO, $aObject);
+        $this->setFetchMode(PDO::FETCH_INTO, $aObject);
 
-        return $this->fetch(\PDO::FETCH_INTO);
+        return $this->fetch(PDO::FETCH_INTO);
     }
 
     /**

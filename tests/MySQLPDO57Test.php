@@ -6,6 +6,9 @@ namespace DVDoug\DB\Test;
 
 use DVDoug\DB\DatabaseInterface;
 use DVDoug\DB\MySQLPDODatabase;
+use Exception;
+use function extension_loaded;
+use function sleep;
 
 class MySQLPDO57Test extends MySQLPDOBaseTest
 {
@@ -27,7 +30,7 @@ class MySQLPDO57Test extends MySQLPDOBaseTest
             try {
                 static::$conn = new MySQLPDODatabase('127.0.0.1', 3357, 'test', 'testuser', 'testpass');
                 $success = true;
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 --$triesLeft;
                 sleep(10);
             }

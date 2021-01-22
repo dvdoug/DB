@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace DVDoug\DB\Test;
 
+use function bin2hex;
 use DVDoug\DB\DatabaseInterface;
+use function explode;
+use function file_get_contents;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 

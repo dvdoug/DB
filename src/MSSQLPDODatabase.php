@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace DVDoug\DB;
 
+use function substr;
+
 /**
  * MSSQL database connection (PDO).
  * @author Doug Wright

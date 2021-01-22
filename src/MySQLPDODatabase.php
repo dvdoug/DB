@@ -8,6 +8,9 @@ declare(strict_types=1);
 
 namespace DVDoug\DB;
 
+use function bin2hex;
+use PDO;
+
 /**
  * MySQL database connection (PDO).
  * @author Doug Wright
@@ -36,7 +39,7 @@ class MySQLPDODatabase extends PDODatabase
     public function __construct($aHost, $aPort, $aDefaultDatabase, $aUsername, $aPassword, $aCharset = 'utf8mb4')
     {
         parent::__construct("mysql:host={$aHost};port={$aPort};dbname={$aDefaultDatabase};charset={$aCharset}", $aUsername, $aPassword);
-        self::setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
+        self::setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
     }
 
     /**
